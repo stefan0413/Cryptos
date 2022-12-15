@@ -5,4 +5,4 @@ API of a cryptocurrency exchange platform
 [Task's description](https://bit.ly/diploma_cryptos)
 
 
-[Customers service](https://docs.google.com/document/d/119gkgwxQ48G4MFqUwBrsXbgLXzhSJ1hArs7TEIfOb3w/edit?usp=sharing)
+[Customers service design](https://docs.google.com/document/d/119gkgwxQ48G4MFqUwBrsXbgLXzhSJ1hArs7TEIfOb3w/edit?usp=sharing)
