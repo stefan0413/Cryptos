@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: customers
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/customers
+    username: root
+    password: root
+    hikari:
+      maximum-pool-size: 32
+      minimum-idle: 10
+      connection-timeout: 60000
