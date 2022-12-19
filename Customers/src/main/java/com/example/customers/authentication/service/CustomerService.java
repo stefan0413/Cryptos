@@ -1,6 +1,7 @@
 package com.example.customers.authentication.service;
 
 import com.example.customers.authentication.model.Customer;
+import com.example.customers.authentication.model.CustomerRegistration;
 import com.example.customers.authentication.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,6 @@ public class CustomerService
 
 	public Customer getCustomerById(long customerId)
 	{
-		return customerRepository.getCustomerById(customerId).orElseGet(()-> null);
+		return customerRepository.getCustomerById(customerId).orElseGet(() -> null);
 	}
 }

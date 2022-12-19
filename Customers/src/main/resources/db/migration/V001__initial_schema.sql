@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `customer`
 (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
     `email` VARCHAR(64) NOT NULL UNIQUE,
-    `password` BINARY(60) NOT NULL UNIQUE,
+    `password` VARCHAR(64) NOT NULL UNIQUE,
     `first_name` VARCHAR(64) NOT NULL,
     `second_name` VARCHAR(64) NOT NULL,
     `last_name` VARCHAR(64) NOT NULL,
