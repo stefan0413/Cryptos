@@ -1,27 +1,65 @@
 package com.example.customers.authentication.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.customers.authentication.service.CustomerService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig
 {
+
+	private final CustomerService customerService;
+	private final JWTAuthenticationFilter jwtAuthenticationFilter;
+
+	public SpringSecurityConfig(CustomerService customerService, JWTAuthenticationFilter jwtAuthenticationFilter)
+	{
+		this.customerService = customerService;
+		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+	}
+
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf()
-			.disable()
-			.httpBasic()
-			.disable().authorizeHttpRequests().anyRequest().permitAll();
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception
+	{
+		return configuration.getAuthenticationManager();
+	}
+
+	@Bean
+	public AuthenticationProvider authenticationProvider()
+	{
+		final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+
+		authenticationProvider.setUserDetailsService(customerService);
+		authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+
+		return authenticationProvider;
+	}
+
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
+	{
+		http.csrf().disable()
+			.authorizeHttpRequests((request) -> request.requestMatchers(
+					new AntPathRequestMatcher("/**/authenticate/**", HttpMethod.POST.name()),
+					new AntPathRequestMatcher("/**/registrate/**", HttpMethod.POST.name())).permitAll()
+					.anyRequest().authenticated())
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.authenticationProvider(authenticationProvider())
+			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 }

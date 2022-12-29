@@ -1,6 +1,6 @@
 package com.example.customers.authentication.model;
 
-public record CustomerRegistration(
+public record RegistrationRequest(
 		String email,
 		String password,
 		String firstName,

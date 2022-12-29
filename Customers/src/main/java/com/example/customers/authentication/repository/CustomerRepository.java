@@ -1,8 +1,7 @@
 package com.example.customers.authentication.repository;
 
 import com.example.customers.authentication.model.Customer;
-import com.example.customers.authentication.model.CustomerRegistration;
-import jakarta.websocket.OnClose;
+import com.example.customers.authentication.model.RegistrationRequest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -51,17 +50,27 @@ public class CustomerRepository
 		}
 	}
 
-	public Optional<Customer> registrateCustomer(CustomerRegistration customerRegistration)
+	public Optional<Customer> getCustomerByEmail(String email)
 	{
-		Map<String, Object> parameters = Map.of("email", customerRegistration.email(),
-												"password", customerRegistration.password(),
-												"first_name", customerRegistration.firstName(),
-												"second_name", customerRegistration.secondName(),
-												"last_name", customerRegistration.lastName(),
-												"mobile_number", customerRegistration.mobileNumber());
-		System.out.println("CustomerRegistration2: " + customerRegistration);
+		final String sql = "SELECT * FROM customer WHERE email = :email";
+
+		Map<String, Object> params = Map.of("email", email);
+
+		return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, params,
+																			 new DataClassRowMapper<>(Customer.class)));
+	}
+
+	public Optional<Customer> registrateCustomer(RegistrationRequest registrationRequest)
+	{
+		Map<String, Object> parameters = Map.of("email", registrationRequest.email(),
+												"password", registrationRequest.password(),
+												"first_name", registrationRequest.firstName(),
+												"second_name", registrationRequest.secondName(),
+												"last_name", registrationRequest.lastName(),
+												"mobile_number", registrationRequest.mobileNumber());
+		System.out.println("CustomerRegistration2: " + registrationRequest);
 		long customerId = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
-		System.out.println("CustomerRegistration3: " + customerRegistration);
+		System.out.println("CustomerRegistration3: " + registrationRequest);
 		return getCustomerById(customerId);
 	}
 }
