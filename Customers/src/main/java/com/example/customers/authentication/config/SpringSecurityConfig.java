@@ -52,8 +52,8 @@ public class SpringSecurityConfig
 	{
 		http.csrf().disable()
 			.authorizeHttpRequests((request) -> request.requestMatchers(
-					new AntPathRequestMatcher("/**/authenticate/**", HttpMethod.POST.name()),
-					new AntPathRequestMatcher("/**/registrate/**", HttpMethod.POST.name())).permitAll()
+					new AntPathRequestMatcher("/**/authentication/**", HttpMethod.POST.name()),
+					new AntPathRequestMatcher("/**/register/**", HttpMethod.POST.name())).permitAll()
 					.anyRequest().authenticated())
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -68,9 +68,7 @@ public class CustomerRepository
 												"second_name", registrationRequest.secondName(),
 												"last_name", registrationRequest.lastName(),
 												"mobile_number", registrationRequest.mobileNumber());
-		System.out.println("CustomerRegistration2: " + registrationRequest);
 		long customerId = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
-		System.out.println("CustomerRegistration3: " + registrationRequest);
 		return getCustomerById(customerId);
 	}
 }
