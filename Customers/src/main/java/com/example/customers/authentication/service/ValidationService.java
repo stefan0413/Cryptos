@@ -43,7 +43,7 @@ public class ValidationService
 							Password should be:
 							between 8 and 20 characters,
 							containing at least one number,
-							upper case letter, 
+							upper case letter,
 							lower case letter and symbol.
 							""");
 		}

@@ -1,6 +1,6 @@
 package com.example.customers.authentication.service;
 
-import com.example.customers.authentication.model.Customer;
+import com.example.customers.authentication.model.AuthenticationRequest;
 import com.example.customers.authentication.model.RegistrationRequest;
 import com.example.customers.authentication.repository.CustomerRepository;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -10,20 +10,33 @@ import org.springframework.stereotype.Service;
 public class RegistrationService
 {
 
-	private CustomerRepository customerRepository;
+	private final CustomerRepository customerRepository;
 
-	public RegistrationService(CustomerRepository customerRepository)
+	private final AuthenticationService authenticationService;
+
+	public RegistrationService(CustomerRepository customerRepository, AuthenticationService authenticationService)
 	{
 		this.customerRepository = customerRepository;
+		this.authenticationService = authenticationService;
 	}
 
-	public Customer registrateCustomer(RegistrationRequest registrationRequest)
+	public String registerCustomer(RegistrationRequest registrationRequest)
 	{
 		ValidationService.validateRegistrationRequest(registrationRequest);
 
-		System.out.println(registrationRequest);
+		customerRepository.registrateCustomer(getCustomerWithHashedPassword(registrationRequest)).get();
 
-		return customerRepository.registrateCustomer(getCustomerWithHashedPassword(registrationRequest)).get();
+		return logInRegisteredCustomer(registrationRequest);
+	}
+
+	private String logInRegisteredCustomer(RegistrationRequest registrationRequest)
+	{
+		return authenticationService.authenticateCustomer(buildAuthenticationRequest(registrationRequest));
+	}
+
+	private AuthenticationRequest buildAuthenticationRequest(RegistrationRequest registrationRequest)
+	{
+		return new AuthenticationRequest(registrationRequest.email(), registrationRequest.password());
 	}
 
 
