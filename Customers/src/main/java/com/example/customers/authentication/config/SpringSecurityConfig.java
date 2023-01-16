@@ -52,9 +52,13 @@ public class SpringSecurityConfig
 	{
 		http.csrf().disable()
 			.authorizeHttpRequests((request) -> request.requestMatchers(
-					new AntPathRequestMatcher("/**/authentication/**", HttpMethod.POST.name()),
-					new AntPathRequestMatcher("/**/register/**", HttpMethod.POST.name())).permitAll()
-					.anyRequest().authenticated())
+					new AntPathRequestMatcher("/**/swagger-ui/index.html", HttpMethod.GET.name()),
+					new AntPathRequestMatcher("/**/swagger-ui/**", HttpMethod.GET.name())))
+			.authorizeHttpRequests((request) -> request.requestMatchers(
+				   new AntPathRequestMatcher("/**/authentication/**", HttpMethod.POST.name()),
+				   new AntPathRequestMatcher("/**/register/**", HttpMethod.POST.name())
+						   ).permitAll()
+		   .anyRequest().authenticated())
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()

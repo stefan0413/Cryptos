@@ -13,14 +13,12 @@ public class AuthenticationService
 
 	private final AuthenticationManager authenticationManager;
 	private final CustomerService customerService;
-	private final UserDetails userDetails;
 	private final JwtUtils jwtUtils;
 
-	public AuthenticationService(AuthenticationManager authenticationManager, CustomerService customerService, UserDetails userDetails, JwtUtils jwtUtils)
+	public AuthenticationService(AuthenticationManager authenticationManager, CustomerService customerService, JwtUtils jwtUtils)
 	{
 		this.authenticationManager = authenticationManager;
 		this.customerService = customerService;
-		this.userDetails = userDetails;
 		this.jwtUtils = jwtUtils;
 	}
 
