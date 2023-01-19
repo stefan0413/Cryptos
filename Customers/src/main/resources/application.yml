@@ -10,8 +10,3 @@ spring:
       maximum-pool-size: 32
       minimum-idle: 10
       connection-timeout: 60000
-
-springdoc:
-  swagger-ui:
-    config-url: /v3/api-docs/swagger-config
-    url: /v3/api-docs
