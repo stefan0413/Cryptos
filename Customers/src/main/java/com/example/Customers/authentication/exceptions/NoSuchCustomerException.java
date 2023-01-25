@@ -1,8 +1,8 @@
 package com.example.customers.authentication.exceptions;
 
-import java.util.function.Supplier;
+import org.springframework.security.core.AuthenticationException;
 
-public class NoSuchCustomerException extends RuntimeException
+public class NoSuchCustomerException extends AuthenticationException
 {
 
 	public NoSuchCustomerException(String message)
