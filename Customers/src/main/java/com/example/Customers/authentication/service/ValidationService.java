@@ -9,8 +9,10 @@ import java.util.regex.Pattern;
 public class ValidationService
 {
 
-	private static final String VALID_PASSWORD_REGEX_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
-	private static final String VALID_MOBILE_NUMBER_REGEX_PATTERN = "^\\+[0-9]{2,3} [0-9]{4,12}$";
+	private static final String VALID_PASSWORD_REGEX_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
+	private static final String VALID_MOBILE_NUMBER_REGEX_PATTERN = "^(?:\\+\\d{1,3}[- ]?)?\\d{9,12}$";
+	private static final String VALID_ADDRESS_REGEX = "^[a-zA-Z,.]{1,64}$";
+	private static final String VALID_NAME_REGEX = "^[a-zA-Z-.' ]+$";
 
 	public static void validateRegistrationRequest(RegistrationRequest registrationRequest)
 	{
@@ -18,6 +20,10 @@ public class ValidationService
 		validateEmail(registrationRequest.email());
 		validatePassword(registrationRequest.password());
 		validateMobileNumber(registrationRequest.mobileNumber());
+		validateName(registrationRequest.firstName());
+		validateName(registrationRequest.secondName());
+		validateName(registrationRequest.lastName());
+		//validateAddress(registrationRequest.email());
 	}
 
 	private static void validateRequestFieldsAreEmpty(RegistrationRequest registrationRequest)
@@ -29,7 +35,7 @@ public class ValidationService
 			registrationRequest.lastName() == null ||
 			registrationRequest.mobileNumber() == null)
 		{
-			throw (new InvalidCredentialsException("Invalid request! \nAll fields should be completed!"));
+			throw (new InvalidCredentialsException("Invalid registration request! \nAll fields should be completed!"));
 		}
 	}
 
@@ -61,7 +67,23 @@ public class ValidationService
 	{
 		if (!Pattern.compile(VALID_MOBILE_NUMBER_REGEX_PATTERN).matcher(mobileNumber).matches())
 		{
-			throw new InvalidCredentialsException("Invalid mobile number pattern");
+			throw new InvalidCredentialsException("Invalid mobile number");
+		}
+	}
+
+	private static void validateAddress(String address)
+	{
+		if (!Pattern.compile(VALID_ADDRESS_REGEX).matcher(address).matches())
+		{
+			throw new InvalidCredentialsException("Invalid address format");
+		}
+	}
+
+	private static void validateName(String name)
+	{
+		if (!Pattern.compile(VALID_NAME_REGEX).matcher(name).matches())
+		{
+			throw new InvalidCredentialsException("Invalid name");
 		}
 	}
 }
