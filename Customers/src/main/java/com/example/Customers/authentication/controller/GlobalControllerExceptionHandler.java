@@ -1,6 +1,7 @@
 package com.example.customers.authentication.controller;
 
 import com.example.customers.authentication.exceptions.InvalidCredentialsException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,14 @@ public class GlobalControllerExceptionHandler
 	public ResponseEntity handleAuthenticationException(AuthenticationException e)
 	{
 		logger.warn("No such customer exception");
-		return ResponseEntity.status(403).body(buildError("Invalid credentials", e.getMessage()));
+		return ResponseEntity.status(400).body(buildError("Invalid credentials", e.getMessage()));
+	}
+
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity ghandleDataIntegrityException(DataIntegrityViolationException e)
+	{
+		logger.warn("DataIntegirtyViolationException: " + e.getMessage());
+		return ResponseEntity.status(400).body(buildError("DataIntegrityError", e.getMessage()));
 	}
 
 	private Map<String, Object> buildError(String type, String message)
