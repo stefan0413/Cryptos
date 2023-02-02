@@ -11,7 +11,8 @@ public record Customer(long id,
 					   String firstName,
 					   String secondName,
 					   String lastName,
-					   String mobileNumber) implements UserDetails
+					   String mobileNumber,
+					   Boolean active) implements UserDetails
 {
 
 	@Override

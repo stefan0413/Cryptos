@@ -1,0 +1,8 @@
+ALTER TABLE `customer`
+MODIFY COLUMN `first_name` VARCHAR(64),
+MODIFY COLUMN `second_name` VARCHAR(64),
+MODIFY COLUMN `last_name` VARCHAR(64),
+MODIFY COLUMN `mobile_number` VARCHAR(64) UNIQUE;
+
+ALTER TABLE `customer`
+ADD `active` BOOLEAN DEFAULT FALSE;

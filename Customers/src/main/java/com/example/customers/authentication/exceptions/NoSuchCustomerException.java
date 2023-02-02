@@ -5,8 +5,16 @@ import org.springframework.security.core.AuthenticationException;
 public class NoSuchCustomerException extends AuthenticationException
 {
 
-	public NoSuchCustomerException(String message)
+	private final Long customerId;
+
+	public NoSuchCustomerException(String message, Long customerId)
 	{
 		super(message);
+		this.customerId = customerId;
+	}
+
+	public String buildFullMessage()
+	{
+		return getMessage() + " (customerId: " + customerId + ")";
 	}
 }

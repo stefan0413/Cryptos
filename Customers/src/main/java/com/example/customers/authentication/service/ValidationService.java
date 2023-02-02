@@ -1,6 +1,7 @@
 package com.example.customers.authentication.service;
 
 import com.example.customers.authentication.exceptions.InvalidCredentialsException;
+import com.example.customers.authentication.model.FinaliseRegistrationRequest;
 import com.example.customers.authentication.model.RegistrationRequest;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -16,26 +17,40 @@ public class ValidationService
 
 	public static void validateRegistrationRequest(RegistrationRequest registrationRequest)
 	{
-		validateRequestFieldsAreEmpty(registrationRequest);
+		validateRegistrationRequestFieldsAreNotEmpty(registrationRequest);
 		validateEmail(registrationRequest.email());
 		validatePassword(registrationRequest.password());
-		validateMobileNumber(registrationRequest.mobileNumber());
-		validateName(registrationRequest.firstName());
-		validateName(registrationRequest.secondName());
-		validateName(registrationRequest.lastName());
-		//validateAddress(registrationRequest.email());
 	}
 
-	private static void validateRequestFieldsAreEmpty(RegistrationRequest registrationRequest)
+	public static void validateFinaliseRegistrationRequest(FinaliseRegistrationRequest finaliseRegistrationRequest)
+	{
+		validateFinaliseRegistrationRequestFieldsAreNotEmpty(finaliseRegistrationRequest);
+		validateName(finaliseRegistrationRequest.firstName());
+		validateName(finaliseRegistrationRequest.secondName());
+		validateName(finaliseRegistrationRequest.lastName());
+		validateMobileNumber(finaliseRegistrationRequest.mobileNumber());
+		//validateAddress(finaliseRegistrationRequest.address());
+	}
+
+	private static void validateRegistrationRequestFieldsAreNotEmpty(RegistrationRequest registrationRequest)
 	{
 		if (registrationRequest.email() == null ||
-			registrationRequest.password() == null ||
-			registrationRequest.firstName() == null ||
-			registrationRequest.secondName() == null ||
-			registrationRequest.lastName() == null ||
-			registrationRequest.mobileNumber() == null)
+			registrationRequest.password() == null )
 		{
-			throw (new InvalidCredentialsException("Invalid registration request! \nAll fields should be completed!"));
+			throw (new InvalidCredentialsException("Invalid registration request! \nAll fields should be filled!"));
+		}
+	}
+
+	private static void validateFinaliseRegistrationRequestFieldsAreNotEmpty(
+			FinaliseRegistrationRequest finaliseRegistrationRequest)
+	{
+		if (finaliseRegistrationRequest.firstName() == null ||
+			finaliseRegistrationRequest.secondName() == null ||
+			finaliseRegistrationRequest.lastName() == null ||
+			finaliseRegistrationRequest.mobileNumber() == null )
+		{
+			throw (new InvalidCredentialsException("Invalid finalise registration request! " +
+												   "\nAll fields should be filled!"));
 		}
 	}
 

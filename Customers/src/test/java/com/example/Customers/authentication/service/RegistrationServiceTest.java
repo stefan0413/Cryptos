@@ -19,6 +19,7 @@ class RegistrationServiceTest
 
 	private CustomerRepository customerRepository;
 	private AuthenticationService authenticationService;
+	private CustomerService customerService;
 
 	private RegistrationService registrationService;
 
@@ -27,8 +28,9 @@ class RegistrationServiceTest
 	{
 		authenticationService = Mockito.mock(AuthenticationService.class);
 		customerRepository = Mockito.mock(CustomerRepository.class);
+		customerService = Mockito.mock(CustomerService.class);
 
-		registrationService = new RegistrationService(customerRepository, authenticationService);
+		registrationService = new RegistrationService(customerRepository, authenticationService, customerService);
 	}
 
 	@Test
@@ -44,9 +46,7 @@ class RegistrationServiceTest
 	private static RegistrationRequest buildRegistrationRequest()
 	{
 		return new RegistrationRequest("email@example.com",
-									   "A!@#&()–a1",
-									   "John", "James", "Smith",
-									   "+359 888787654");
+									   "A!@#&()–a1");
 	}
 
 	private static Customer buildCustomer()
