@@ -1,6 +1,7 @@
 package com.example.customers.authentication.service;
 
 
+import com.example.customers.authentication.config.JwtUtils;
 import com.example.customers.authentication.model.Customer;
 import com.example.customers.authentication.model.RegistrationRequest;
 import com.example.customers.authentication.repository.CustomerRepository;
@@ -18,19 +19,19 @@ class RegistrationServiceTest
 {
 
 	private CustomerRepository customerRepository;
-	private AuthenticationService authenticationService;
 	private CustomerService customerService;
+	private JwtUtils jwtUtils;
 
 	private RegistrationService registrationService;
 
 	@BeforeEach
 	void setUp()
 	{
-		authenticationService = Mockito.mock(AuthenticationService.class);
 		customerRepository = Mockito.mock(CustomerRepository.class);
 		customerService = Mockito.mock(CustomerService.class);
+		jwtUtils = Mockito.mock(JwtUtils.class);
 
-		registrationService = new RegistrationService(customerRepository, authenticationService, customerService);
+		registrationService = new RegistrationService(customerRepository, customerService, jwtUtils);
 	}
 
 	@Test
@@ -40,7 +41,6 @@ class RegistrationServiceTest
 		registrationService.registerCustomer(buildRegistrationRequest());
 
 		verify(customerRepository).registrateCustomer(any());
-		verify(authenticationService).authenticateCustomer(any());
 	}
 
 	private static RegistrationRequest buildRegistrationRequest()
@@ -55,6 +55,7 @@ class RegistrationServiceTest
 							"email@example.com",
 							"A!@#&()–a1",
 							"John", "James", "Smith",
-							"+359 888787654");
+							"+359 888787654",
+							true);
 	}
 }

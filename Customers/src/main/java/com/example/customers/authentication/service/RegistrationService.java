@@ -1,6 +1,6 @@
 package com.example.customers.authentication.service;
 
-import com.example.customers.authentication.model.AuthenticationRequest;
+import com.example.customers.authentication.config.JwtUtils;
 import com.example.customers.authentication.model.Customer;
 import com.example.customers.authentication.model.FinaliseRegistrationRequest;
 import com.example.customers.authentication.model.RegistrationRequest;
@@ -16,17 +16,16 @@ public class RegistrationService
 {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	private final CustomerRepository customerRepository;
-
-	private final AuthenticationService authenticationService;
 	private final CustomerService customerService;
+	private final JwtUtils jwtUtils;
 
 	public RegistrationService(CustomerRepository customerRepository,
-							   AuthenticationService authenticationService,
-							   CustomerService customerService)
+								CustomerService customerService,
+								JwtUtils jwtUtils)
 	{
 		this.customerRepository = customerRepository;
-		this.authenticationService = authenticationService;
 		this.customerService = customerService;
+		this.jwtUtils = jwtUtils;
 	}
 
 	public Long registerCustomer(RegistrationRequest registrationRequest)
@@ -48,9 +47,7 @@ public class RegistrationService
 	private String logInRegisteredCustomer(long customerId)
 	{
 		Customer customer = customerService.getCustomerById(customerId);
-		logger.info("Authentication request: " + customer.getUsername() + "\n " + customer.getPassword());
-		return authenticationService.authenticateCustomer(new AuthenticationRequest(customer.getUsername(),
-																					customer.getPassword()));
+		return jwtUtils.generateToken(customer);
 	}
 
 	private RegistrationRequest getCustomerWithHashedPassword(RegistrationRequest registrationRequest)
