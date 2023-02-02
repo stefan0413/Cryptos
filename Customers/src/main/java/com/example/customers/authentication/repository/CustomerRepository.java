@@ -1,10 +1,13 @@
 package com.example.customers.authentication.repository;
 
 import com.example.customers.authentication.model.Customer;
+import com.example.customers.authentication.model.FinaliseRegistrationRequest;
 import com.example.customers.authentication.model.RegistrationRequest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.DataClassRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -25,11 +28,7 @@ public class CustomerRepository
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 		this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("customer")
 																.usingColumns("email",
-																			  "password",
-																			  "first_name",
-																			  "second_name",
-																			  "last_name",
-																			  "mobile_number")
+																			  "password")
 																.usingGeneratedKeyColumns("id");
 		;
 	}
@@ -39,15 +38,8 @@ public class CustomerRepository
 		final String sql = "SELECT * FROM customer WHERE id = :id";
 
 		Map<String, Object> params = Map.of("id", id);
-		try
-		{
-			return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, params,
+			return Optional.of(namedParameterJdbcTemplate.queryForObject(sql, params,
 																				 new DataClassRowMapper<>(Customer.class)));
-		}
-		catch (EmptyResultDataAccessException e)
-		{
-			return Optional.empty();
-		}
 	}
 
 	public Optional<Customer> getCustomerByEmail(String email)
@@ -63,12 +55,28 @@ public class CustomerRepository
 	public Optional<Customer> registrateCustomer(RegistrationRequest registrationRequest)
 	{
 		Map<String, Object> parameters = Map.of("email", registrationRequest.email(),
-												"password", registrationRequest.password(),
-												"first_name", registrationRequest.firstName(),
-												"second_name", registrationRequest.secondName(),
-												"last_name", registrationRequest.lastName(),
-												"mobile_number", registrationRequest.mobileNumber());
+												"password", registrationRequest.password());
+
 		long customerId = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 		return getCustomerById(customerId);
+	}
+
+	public void finaliseRegistration(long customerId,FinaliseRegistrationRequest finaliseRegistrationRequest)
+	{
+		final String sql = "UPDATE customer SET " +
+						   "first_name = :first_name, " +
+						   "second_name = :second_name, " +
+						   "last_name = :last_name, " +
+						   "mobile_number = :mobile_number, " +
+						   "active = TRUE " +
+						   "WHERE id = :id";
+
+		Map<String, Object> parameters = Map.of("id", customerId,
+												"first_name", finaliseRegistrationRequest.firstName(),
+												"second_name", finaliseRegistrationRequest.secondName(),
+												"last_name", finaliseRegistrationRequest.lastName(),
+												"mobile_number", finaliseRegistrationRequest.mobileNumber());
+
+		namedParameterJdbcTemplate.update(sql, parameters);
 	}
 }

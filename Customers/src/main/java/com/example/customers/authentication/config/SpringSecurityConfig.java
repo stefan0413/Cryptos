@@ -3,7 +3,6 @@ package com.example.customers.authentication.config;
 import com.example.customers.authentication.service.CustomerService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -52,8 +51,7 @@ public class SpringSecurityConfig
 	{
 		http.csrf().disable()
 			.authorizeHttpRequests((request) -> request.requestMatchers(
-					new AntPathRequestMatcher("/**/authentication/**", HttpMethod.POST.name()),
-					new AntPathRequestMatcher("/**/register/**", HttpMethod.POST.name())).permitAll()
+					new AntPathRequestMatcher("/api/v1/customers/authentication/**")).permitAll()
 					.anyRequest().authenticated())
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
