@@ -55,11 +55,7 @@ class ValidationServiceTest
 	private RegistrationRequest buildRegistrationRequest(String email, String password, String name, String mobileNumber)
 	{
 		return new RegistrationRequest(email,
-									   password,
-									   name,
-									   name,
-									   name,
-									   mobileNumber);
+									   password);
 	}
 
 	private static Stream<String> validEmails(){

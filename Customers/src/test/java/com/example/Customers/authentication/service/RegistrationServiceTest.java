@@ -37,10 +37,10 @@ class RegistrationServiceTest
 	@Test
 	void testRegisterCustomerWithValidRegistrationRequestShouldVerify()
 	{
-		when(customerRepository.registrateCustomer(any())).thenReturn(Optional.of(buildCustomer()));
+		when(customerRepository.registerCustomer(any())).thenReturn(Optional.of(buildCustomer()));
 		registrationService.registerCustomer(buildRegistrationRequest());
 
-		verify(customerRepository).registrateCustomer(any());
+		verify(customerRepository).registerCustomer(any());
 	}
 
 	private static RegistrationRequest buildRegistrationRequest()
