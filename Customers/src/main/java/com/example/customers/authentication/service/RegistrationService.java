@@ -32,7 +32,7 @@ public class RegistrationService
 	{
 		ValidationService.validateRegistrationRequest(registrationRequest);
 
-		return customerRepository.registrateCustomer(getCustomerWithHashedPassword(registrationRequest)).get().id();
+		return customerRepository.registerCustomer(getCustomerWithHashedPassword(registrationRequest)).get().id();
 	}
 
 	public String finaliseRegistration(long customerId, FinaliseRegistrationRequest finaliseRegistrationRequest)

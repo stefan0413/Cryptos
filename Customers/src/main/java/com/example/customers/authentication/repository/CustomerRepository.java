@@ -3,11 +3,8 @@ package com.example.customers.authentication.repository;
 import com.example.customers.authentication.model.Customer;
 import com.example.customers.authentication.model.FinaliseRegistrationRequest;
 import com.example.customers.authentication.model.RegistrationRequest;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.DataClassRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -52,7 +49,7 @@ public class CustomerRepository
 																			 new DataClassRowMapper<>(Customer.class)));
 	}
 
-	public Optional<Customer> registrateCustomer(RegistrationRequest registrationRequest)
+	public Optional<Customer> registerCustomer(RegistrationRequest registrationRequest)
 	{
 		Map<String, Object> parameters = Map.of("email", registrationRequest.email(),
 												"password", registrationRequest.password());

@@ -1,14 +1,12 @@
 package com.example.customers.authentication.controller;
 
 import com.example.customers.authentication.model.AuthenticationRequest;
+import com.example.customers.authentication.model.CustomerResponse;
 import com.example.customers.authentication.model.FinaliseRegistrationRequest;
 import com.example.customers.authentication.model.RegistrationRequest;
 import com.example.customers.authentication.service.AuthenticationService;
-import com.example.customers.authentication.service.CustomerService;
 import com.example.customers.authentication.service.RegistrationService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/customers/authentication")
 public class CustomerAuthenticationController
 {
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 	private final RegistrationService registrationService;
 	private final AuthenticationService authenticationService;
 
@@ -31,21 +29,30 @@ public class CustomerAuthenticationController
 	}
 
 	@PostMapping("/authenticate")
-	public String authenticate(@RequestBody AuthenticationRequest authenticationRequest)
+	public CustomerResponse authenticate(@RequestBody AuthenticationRequest authenticationRequest)
 	{
-		return authenticationService.authenticateCustomer(authenticationRequest);
+		return buildCustomerResponse(authenticationService.authenticateCustomer(authenticationRequest),
+									 "Successfully authenticated");
+
 	}
 
 	@PostMapping("/register")
-	public Long registrateCustomer(@RequestBody RegistrationRequest registrationRequest)
+	public CustomerResponse registerCustomer(@RequestBody RegistrationRequest registrationRequest)
 	{
-		return registrationService.registerCustomer(registrationRequest);
+		return buildCustomerResponse(registrationService.registerCustomer(registrationRequest).toString(),
+									 "Successfull registration");
 	}
 
 	@PostMapping("/{customerId}/finalise-registration")
-	public String finaliseRegistration(@PathVariable Long customerId,
-									   @RequestBody FinaliseRegistrationRequest finaliseRegistrationRequest)
+	public CustomerResponse finaliseRegistration(@PathVariable Long customerId,
+												 @RequestBody FinaliseRegistrationRequest finaliseRegistrationRequest)
 	{
-		return registrationService.finaliseRegistration(customerId, finaliseRegistrationRequest);
+		return buildCustomerResponse(registrationService.finaliseRegistration(customerId, finaliseRegistrationRequest),
+									 "Successfully completed the registration");
+	}
+
+	private CustomerResponse buildCustomerResponse(String value, String message)
+	{
+		return new CustomerResponse(true, value, message);
 	}
 }
