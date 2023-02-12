@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: payments
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/payments
+    username: root
+    password: root
+    hikari:
+      maximum-pool-size: 32
+      minimum-idle: 10
+      connection-timeout: 60000
+
+stripe:
+    test-key: sk_test_51MH0dvCucZ6lucMqNVBvffVtbqwA8kucCFkzmNS421Q7nEGu05Xnn3CM5ChaaDBJO65FhdgQQJnFMmpeNZRXgAV600Ocp05xfs
