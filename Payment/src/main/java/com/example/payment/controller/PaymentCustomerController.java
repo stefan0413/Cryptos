@@ -20,12 +20,10 @@ public class PaymentCustomerController
 	}
 
 	@PostMapping("/create/{customerId}")
-	public String createPaymentCustomer(@PathVariable Long customerId,
-										@RequestParam String email,
-										@RequestParam String currency
-										) throws StripeException
+	public String createPaymentCustomer(@PathVariable Long customerId) throws StripeException
 	{
-		return paymentCustomerService.createCustomer(customerId, currency, email);
+		System.out.println("received a request");
+		return paymentCustomerService.createCustomer(customerId);
 	}
 
 }
