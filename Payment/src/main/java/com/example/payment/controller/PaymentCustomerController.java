@@ -48,7 +48,7 @@ public class PaymentCustomerController
 		return Customer.retrieve(String.valueOf(customerId), retrieveParams, null).toJson();
 	}
 
-	@GetMapping("/customer")
+	@GetMapping
 	public String retrieveCustomer(@PathVariable long customerId) throws StripeException
 	{
 		return Customer.retrieve(String.valueOf(customerId)).toJson();

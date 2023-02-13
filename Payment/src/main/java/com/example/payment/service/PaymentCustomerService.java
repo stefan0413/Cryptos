@@ -5,6 +5,7 @@ import com.example.payment.rest.CustomerRestService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
+import com.stripe.model.PaymentMethod;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

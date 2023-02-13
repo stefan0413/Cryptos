@@ -1,14 +1,17 @@
 package com.example.payment.controller;
 
 import com.example.payment.service.PaymentService;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/api/payments/{customerId}/payment-intents")
 public class PaymentController
 {
 
@@ -20,15 +23,18 @@ public class PaymentController
 	}
 
 	@PostMapping("/create")
-	public String createPaymentIntent(@RequestParam Integer amount,
-									  @RequestParam String currency) throws Exception
+	public String createPaymentIntent(@PathVariable long customerId,
+									  @RequestParam(required = false) String paymentMethodId,
+									  @RequestParam String currency,
+									  @RequestParam BigDecimal amount) throws Exception
 	{
-		return paymentService.createPaymentIntent(amount, currency);
+		return paymentService.createPaymentIntent(customerId, paymentMethodId, currency, amount);
 	}
 
 	@PostMapping("/confirm")
-	public String confirmPaymentIntent(@RequestParam String id) throws Exception
+	public void confirmPaymentIntent(@PathVariable long customerId,
+									   @RequestParam String paymentIntentId) throws Exception
 	{
-		return paymentService.confirmPaymentIntent(id);
+		paymentService.confirmPaymentIntent(customerId, paymentIntentId);
 	}
 }
