@@ -1,14 +1,17 @@
 package com.example.customers.authentication.repository;
 
 import com.example.customers.authentication.model.Customer;
+import com.example.customers.authentication.model.CustomerData;
 import com.example.customers.authentication.model.FinaliseRegistrationRequest;
 import com.example.customers.authentication.model.RegistrationRequest;
+import com.example.customers.authentication.service.rowmappers.CustomerDataRowMapper;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,15 +21,18 @@ public class CustomerRepository
 
 	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private final SimpleJdbcInsert simpleJdbcInsert;
+	private final CustomerDataRowMapper customerDataRowMapper;
 
 	public CustomerRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
-							  DataSource dataSource)
+							  DataSource dataSource,
+							  CustomerDataRowMapper customerDataRowMapper)
 	{
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 		this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("customer")
 																.usingColumns("email",
 																			  "password")
 																.usingGeneratedKeyColumns("id");
+		this.customerDataRowMapper = customerDataRowMapper;
 		;
 	}
 
@@ -35,8 +41,8 @@ public class CustomerRepository
 		final String sql = "SELECT * FROM customer WHERE id = :id";
 
 		Map<String, Object> params = Map.of("id", id);
-			return Optional.of(namedParameterJdbcTemplate.queryForObject(sql, params,
-																				 new DataClassRowMapper<>(Customer.class)));
+		return Optional.of(namedParameterJdbcTemplate.queryForObject(sql, params,
+																	 new DataClassRowMapper<>(Customer.class)));
 	}
 
 	public Optional<Customer> getCustomerByEmail(String email)
@@ -58,7 +64,7 @@ public class CustomerRepository
 		return getCustomerById(customerId);
 	}
 
-	public void finaliseRegistration(long customerId,FinaliseRegistrationRequest finaliseRegistrationRequest)
+	public void finaliseRegistration(long customerId, FinaliseRegistrationRequest finaliseRegistrationRequest)
 	{
 		final String sql = "UPDATE customer SET " +
 						   "first_name = :first_name, " +
@@ -75,5 +81,17 @@ public class CustomerRepository
 												"mobile_number", finaliseRegistrationRequest.mobileNumber());
 
 		namedParameterJdbcTemplate.update(sql, parameters);
+	}
+
+	public List<CustomerData> getCustomerDataById(long customerId)
+	{
+		final String sql = """
+				SELECT id, email, first_name, second_name, last_name, mobile_number
+				FROM customer
+				WHERE id = :id""";
+
+		Map<String, Object> params = Map.of("id", customerId);
+
+		return namedParameterJdbcTemplate.query(sql, params, customerDataRowMapper);
 	}
 }

@@ -6,13 +6,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Payment" />
         <module name="Customers" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="fdfd" target="17" />
+      <module name="fdfd (1) (com.cryptos)" target="17" />
+      <module name="test" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Customers" options="-parameters" />
+      <module name="Payment" options="-parameters" />
+      <module name="fdfd" options="-parameters" />
+      <module name="fdfd (1) (com.cryptos)" options="-parameters" />
+      <module name="test" options="-parameters" />
     </option>
   </component>
 </project>
