@@ -1,7 +1,5 @@
 package com.example.customers.authentication.service;
 
-
-import com.example.customers.authentication.config.JwtUtils;
 import com.example.customers.authentication.model.Customer;
 import com.example.customers.authentication.model.RegistrationRequest;
 import com.example.customers.authentication.repository.CustomerRepository;
@@ -9,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -19,25 +16,22 @@ class RegistrationServiceTest
 {
 
 	private CustomerRepository customerRepository;
-	private CustomerService customerService;
-	private JwtUtils jwtUtils;
 
 	private RegistrationService registrationService;
+	private CustomerService customerService;
 
 	@BeforeEach
 	void setUp()
 	{
 		customerRepository = Mockito.mock(CustomerRepository.class);
-		customerService = Mockito.mock(CustomerService.class);
-		jwtUtils = Mockito.mock(JwtUtils.class);
 
-		registrationService = new RegistrationService(customerRepository, customerService, jwtUtils);
+		registrationService = new RegistrationService(customerRepository, customerService);
 	}
 
 	@Test
 	void testRegisterCustomerWithValidRegistrationRequestShouldVerify()
 	{
-		when(customerRepository.registerCustomer(any())).thenReturn(Optional.of(buildCustomer()));
+		when(customerRepository.registerCustomer(any())).thenReturn(1L);
 		registrationService.registerCustomer(buildRegistrationRequest());
 
 		verify(customerRepository).registerCustomer(any());

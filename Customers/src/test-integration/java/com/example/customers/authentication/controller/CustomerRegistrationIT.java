@@ -1,21 +1,15 @@
 package com.example.customers.authentication.controller;
 
 import com.example.customers.BaseIntegrationTest;
-import com.example.customers.authentication.config.JwtUtils;
 import com.example.customers.authentication.model.Customer;
 import com.example.customers.authentication.model.CustomerResponse;
 import com.example.customers.authentication.model.FinaliseRegistrationRequest;
 import com.example.customers.authentication.model.RegistrationRequest;
 import com.example.customers.authentication.repository.CustomerRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 
 public class CustomerRegistrationIT extends BaseIntegrationTest
@@ -28,16 +22,6 @@ public class CustomerRegistrationIT extends BaseIntegrationTest
 
 	@Autowired
 	private CustomerRepository customerRepository;
-
-	@MockBean
-	private JwtUtils jwtUtils;
-
-
-	@BeforeEach
-	void setUp()
-	{
-		when(jwtUtils.generateToken(any())).thenReturn("jwtToken");
-	}
 
 	@Test
 	void registerCustomerWithCorrectDataShouldSaveCustomer()
@@ -73,14 +57,14 @@ public class CustomerRegistrationIT extends BaseIntegrationTest
 	private boolean areCustomersEqual(Customer expected, Customer actual)
 	{
 		return expected.email().equals(actual.email()) &&
-			   BCrypt.checkpw(expected.password(), actual.password()) &&
+			   expected.password().equals(actual.password()) &&
 			   expected.active().equals(actual.active());
 	}
 
 	private boolean areFinalisedCustomersEqual(Customer expected, Customer actual)
 	{
 		return expected.email().equals(actual.email()) &&
-			   BCrypt.checkpw(expected.password(), actual.password()) &&
+			   expected.password().equals(actual.password())  &&
 			   expected.firstName().equals(actual.firstName()) &&
 			   expected.secondName().equals(actual.secondName()) &&
 			   expected.lastName().equals(actual.lastName()) &&

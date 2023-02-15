@@ -1,20 +1,15 @@
 package com.example.customers.authentication.controller;
 
 import com.example.customers.BaseIntegrationTest;
-import com.example.customers.authentication.config.JwtUtils;
 import com.example.customers.authentication.model.AuthenticationRequest;
 import com.example.customers.authentication.model.CustomerResponse;
 import com.example.customers.authentication.model.RegistrationRequest;
 import com.example.customers.authentication.repository.CustomerRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 public class CustomerAuthenticationIT extends BaseIntegrationTest
 {
@@ -28,15 +23,6 @@ public class CustomerAuthenticationIT extends BaseIntegrationTest
 
 	@Autowired
 	private CustomerRepository customerRepository;
-
-	@MockBean
-	private JwtUtils jwtUtils;
-
-	@BeforeEach
-	void setUp()
-	{
-		when(jwtUtils.generateToken(any())).thenReturn("jwtToken");
-	}
 
 	@Test
 	void authenticateRegisteredCustomerShouldReturnJWT()

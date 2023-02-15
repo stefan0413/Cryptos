@@ -1,6 +1,6 @@
-package com.example.customers.authentication.config;
+package com.cryptos.apigateway.security.config;
 
-import com.example.customers.authentication.service.CustomerService;
+import com.cryptos.apigateway.security.service.CustomerAuthenticationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,10 +20,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SpringSecurityConfig
 {
 
-	private final CustomerService customerService;
+	private final CustomerAuthenticationService customerService;
 	private final JWTAuthenticationFilter jwtAuthenticationFilter;
 
-	public SpringSecurityConfig(CustomerService customerService, JWTAuthenticationFilter jwtAuthenticationFilter)
+	public SpringSecurityConfig(CustomerAuthenticationService customerService, JWTAuthenticationFilter jwtAuthenticationFilter)
 	{
 		this.customerService = customerService;
 		this.jwtAuthenticationFilter = jwtAuthenticationFilter;

@@ -1,4 +1,4 @@
-package com.example.customers.authentication.config;
+package com.cryptos.apigateway.security.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

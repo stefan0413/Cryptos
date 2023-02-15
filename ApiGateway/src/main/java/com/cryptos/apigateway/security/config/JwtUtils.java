@@ -1,4 +1,4 @@
-package com.example.customers.authentication.config;
+package com.cryptos.apigateway.security.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
