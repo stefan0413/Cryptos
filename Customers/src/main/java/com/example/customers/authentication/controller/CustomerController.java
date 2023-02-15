@@ -6,6 +6,7 @@ import com.example.customers.authentication.service.CustomerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,9 +27,10 @@ public class CustomerController
 		return customerService.getCustomerById(customerId);
 	}
 
-	@GetMapping("/{email}")
-	private Customer getCustomerByEmail(@PathVariable String email)
+	@GetMapping("/search")
+	private Customer getCustomerByEmail(@RequestParam String email)
 	{
+		System.out.println("Email: " + email);
 		return customerService.getCustomerByEmail(email);
 	}
 

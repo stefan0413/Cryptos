@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.logging.Filter;
-
 @Service
 public class CustomerRestService
 {
@@ -20,7 +18,7 @@ public class CustomerRestService
 
 	public Customer getCustomerDataByEmail(String email)
 	{
-		String url = "http://localhost:9090/private/customers/{email}";
+		String url = "http://localhost:9090/private/customers/search?email={email}";
 
 		Customer customer = restTemplate.getForObject(url, Customer.class, email);
 		logger.info(customer.toString());

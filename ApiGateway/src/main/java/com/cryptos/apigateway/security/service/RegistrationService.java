@@ -34,15 +34,9 @@ public class RegistrationService
 
 	public String finaliseRegistration(long customerId, FinaliseRegistrationRequest finaliseRegistrationRequest)
 	{
-		System.out.println("FinaliseRegistrationRequest: " + finaliseRegistrationRequest);
 		Customer customer = customerRestService.finaliseCustomerRegistration(customerId, finaliseRegistrationRequest);
-		System.out.println("hello");
 
-		String token = jwtUtils.generateToken(customer);
-		System.out.println("Token: " + token);
-		return token;
-
-		//return jwtUtils.generateToken(customer);
+		return jwtUtils.generateToken(customer);
 	}
 
 	private RegistrationRequest getCustomerWithHashedPassword(RegistrationRequest registrationRequest)

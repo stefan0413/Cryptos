@@ -1,7 +1,6 @@
 package com.example.customers.authentication.controller;
 
 import com.example.customers.authentication.model.Customer;
-import com.example.customers.authentication.model.CustomerResponse;
 import com.example.customers.authentication.model.FinaliseRegistrationRequest;
 import com.example.customers.authentication.model.RegistrationRequest;
 import com.example.customers.authentication.service.RegistrationService;
@@ -36,10 +35,5 @@ public class CustomerAuthenticationController
 										 @RequestBody FinaliseRegistrationRequest finaliseRegistrationRequest)
 	{
 		return registrationService.finaliseRegistration(customerId, finaliseRegistrationRequest);
-	}
-
-	private CustomerResponse buildCustomerResponse(String value, String message)
-	{
-		return new CustomerResponse(true, value, message);
 	}
 }
