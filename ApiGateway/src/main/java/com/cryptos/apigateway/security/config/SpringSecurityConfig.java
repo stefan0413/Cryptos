@@ -20,12 +20,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SpringSecurityConfig
 {
 
-	private final CustomerAuthenticationService customerService;
+	private final CustomerAuthenticationService customerAuthenticationService;
 	private final JWTAuthenticationFilter jwtAuthenticationFilter;
 
 	public SpringSecurityConfig(CustomerAuthenticationService customerService, JWTAuthenticationFilter jwtAuthenticationFilter)
 	{
-		this.customerService = customerService;
+		this.customerAuthenticationService = customerService;
 		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
 	}
 
@@ -40,7 +40,7 @@ public class SpringSecurityConfig
 	{
 		final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
-		authenticationProvider.setUserDetailsService(customerService);
+		authenticationProvider.setUserDetailsService(customerAuthenticationService);
 		authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
 
 		return authenticationProvider;
