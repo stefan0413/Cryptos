@@ -29,7 +29,6 @@ public class AuthenticationController
 	@PostMapping("/authenticate")
 	public String authenticate(@RequestBody AuthenticationRequest authenticationRequest)
 	{
-		System.out.println("AuthenticationRequest: " + authenticationRequest);
 		return authenticationService.authenticateCustomer(authenticationRequest);
 	}
 

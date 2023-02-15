@@ -30,7 +30,6 @@ public class CustomerController
 	@GetMapping("/search")
 	private Customer getCustomerByEmail(@RequestParam String email)
 	{
-		System.out.println("Email: " + email);
 		return customerService.getCustomerByEmail(email);
 	}
 
