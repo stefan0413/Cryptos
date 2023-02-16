@@ -1,9 +1,9 @@
 package com.example.customers.authentication.controller;
 
 import com.example.customers.authentication.exceptions.InvalidCredentialsException;
+import com.example.customers.authentication.exceptions.NoSuchCustomerException;
 import com.example.customers.authentication.model.CustomerResponse;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +30,8 @@ public class GlobalControllerExceptionHandler
 		return ResponseEntity.badRequest().body(buildError("Client Error", e.getMessage()));
 	}
 
-	@ExceptionHandler(AuthenticationException.class)
-	public ResponseEntity handleAuthenticationException(AuthenticationException e)
+	@ExceptionHandler(NoSuchCustomerException.class)
+	public ResponseEntity handleAuthenticationException( NoSuchCustomerException e)
 	{
 		logger.warn("No such customer exception");
 		return ResponseEntity.status(400).body(buildError("Invalid credentials", e.getMessage()));

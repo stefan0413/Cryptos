@@ -27,8 +27,6 @@ public class PaymentCustomerService
 	{
 		CustomerDataResponse customerData = customerRestService.getCustomerDataById(customerId);
 
-		System.out.println("helos");
-
 		Map<String, Object> customerParameters = new HashMap<>();
 		customerParameters.put("id", customerId);
 		customerParameters.put("email", customerData.email());

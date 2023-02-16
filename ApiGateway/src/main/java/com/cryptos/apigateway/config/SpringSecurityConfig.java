@@ -1,6 +1,7 @@
-package com.example.customers.authentication.config;
+package com.cryptos.apigateway.config;
 
-import com.example.customers.authentication.service.CustomerService;
+import com.cryptos.apigateway.jwt.JWTAuthenticationFilter;
+import com.cryptos.apigateway.service.CustomerAuthenticationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,12 +21,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SpringSecurityConfig
 {
 
-	private final CustomerService customerService;
+	private final CustomerAuthenticationService customerAuthenticationService;
 	private final JWTAuthenticationFilter jwtAuthenticationFilter;
 
-	public SpringSecurityConfig(CustomerService customerService, JWTAuthenticationFilter jwtAuthenticationFilter)
+	public SpringSecurityConfig(CustomerAuthenticationService customerService, JWTAuthenticationFilter jwtAuthenticationFilter)
 	{
-		this.customerService = customerService;
+		this.customerAuthenticationService = customerService;
 		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
 	}
 
@@ -40,7 +41,7 @@ public class SpringSecurityConfig
 	{
 		final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
-		authenticationProvider.setUserDetailsService(customerService);
+		authenticationProvider.setUserDetailsService(customerAuthenticationService);
 		authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
 
 		return authenticationProvider;
@@ -51,7 +52,7 @@ public class SpringSecurityConfig
 	{
 		http.csrf().disable()
 			.authorizeHttpRequests((request) -> request.requestMatchers(
-					new AntPathRequestMatcher("/**")).permitAll()
+					new AntPathRequestMatcher("/api/public/**")).permitAll()
 					.anyRequest().authenticated())
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

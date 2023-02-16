@@ -55,13 +55,12 @@ public class CustomerRepository
 																			 new DataClassRowMapper<>(Customer.class)));
 	}
 
-	public Optional<Customer> registerCustomer(RegistrationRequest registrationRequest)
+	public Long registerCustomer(RegistrationRequest registrationRequest)
 	{
 		Map<String, Object> parameters = Map.of("email", registrationRequest.email(),
 												"password", registrationRequest.password());
 
-		long customerId = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
-		return getCustomerById(customerId);
+		return  simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 	}
 
 	public void finaliseRegistration(long customerId, FinaliseRegistrationRequest finaliseRegistrationRequest)

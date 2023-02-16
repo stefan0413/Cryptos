@@ -6,15 +6,12 @@ import com.example.customers.authentication.model.CustomerData;
 import com.example.customers.authentication.repository.CustomerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CustomerService implements UserDetailsService
+public class CustomerService
 {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -25,17 +22,17 @@ public class CustomerService implements UserDetailsService
 		this.customerRepository = customerRepository;
 	}
 
-	@Override
-	public UserDetails loadUserByUsername(String email)
+
+	public Customer getCustomerByEmail(String email)
 	{
 		return customerRepository.getCustomerByEmail(email)
-								 .orElseThrow(() -> new UsernameNotFoundException("A customer with email: " + email + ",  does not exist"));
+								 .orElseThrow(() -> new NoSuchCustomerException(String.format("Customer with email: %s is not found", email)));
 	}
 
 	public Customer getCustomerById(long customerId)
 	{
 		return customerRepository.getCustomerById(customerId)
-								 .orElseThrow(() -> new NoSuchCustomerException("No such customer!", customerId));
+								 .orElseThrow(() -> new NoSuchCustomerException(String.format("Customer with customerId: %s is not found", customerId)));
 	}
 
 	public CustomerData getCustomerDataById(long customerId)
@@ -44,7 +41,7 @@ public class CustomerService implements UserDetailsService
 
 		if (customerData.isEmpty())
 		{
-			throw new NoSuchCustomerException("No such customer!", customerId);
+			throw new NoSuchCustomerException(String.format("Customer with customerId: %s is not found", customerId));
 		}
 
 		return customerData.get(0);

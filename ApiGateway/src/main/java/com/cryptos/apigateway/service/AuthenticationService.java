@@ -1,7 +1,7 @@
-package com.example.customers.authentication.service;
+package com.cryptos.apigateway.service;
 
-import com.example.customers.authentication.config.JwtUtils;
-import com.example.customers.authentication.model.AuthenticationRequest;
+import com.cryptos.apigateway.jwt.JwtUtils;
+import com.cryptos.apigateway.model.requests.AuthenticationRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,10 +12,12 @@ public class AuthenticationService
 {
 
 	private final AuthenticationManager authenticationManager;
-	private final CustomerService customerService;
+	private final CustomerAuthenticationService customerService;
 	private final JwtUtils jwtUtils;
 
-	public AuthenticationService(AuthenticationManager authenticationManager, CustomerService customerService, JwtUtils jwtUtils)
+	public AuthenticationService(AuthenticationManager authenticationManager,
+								 CustomerAuthenticationService customerService,
+								 JwtUtils jwtUtils)
 	{
 		this.authenticationManager = authenticationManager;
 		this.customerService = customerService;

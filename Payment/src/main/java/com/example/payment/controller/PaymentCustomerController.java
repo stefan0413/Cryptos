@@ -28,7 +28,6 @@ public class PaymentCustomerController
 	@PostMapping("/create")
 	public String createPaymentCustomer(@PathVariable Long customerId) throws StripeException
 	{
-		System.out.println("received a request");
 		return paymentCustomerService.createCustomer(customerId);
 	}
 

@@ -19,7 +19,7 @@ public class ValidationService
 	{
 		validateRegistrationRequestFieldsAreNotEmpty(registrationRequest);
 		validateEmail(registrationRequest.email());
-		validatePassword(registrationRequest.password());
+		//validatePassword(registrationRequest.password());
 	}
 
 	public static void validateFinaliseRegistrationRequest(FinaliseRegistrationRequest finaliseRegistrationRequest)
