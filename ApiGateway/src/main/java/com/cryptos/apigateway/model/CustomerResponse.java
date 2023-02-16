@@ -1,4 +1,4 @@
-package com.cryptos.apigateway.security.model;
+package com.cryptos.apigateway.model;
 
 public record CustomerResponse(long id,
 							   String email,

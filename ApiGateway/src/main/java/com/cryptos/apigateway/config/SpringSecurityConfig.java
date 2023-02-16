@@ -1,6 +1,7 @@
-package com.cryptos.apigateway.security.config;
+package com.cryptos.apigateway.config;
 
-import com.cryptos.apigateway.security.service.CustomerAuthenticationService;
+import com.cryptos.apigateway.jwt.JWTAuthenticationFilter;
+import com.cryptos.apigateway.service.CustomerAuthenticationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,7 +52,7 @@ public class SpringSecurityConfig
 	{
 		http.csrf().disable()
 			.authorizeHttpRequests((request) -> request.requestMatchers(
-					new AntPathRequestMatcher("/api/authentication/**")).permitAll()
+					new AntPathRequestMatcher("/api/public/**")).permitAll()
 					.anyRequest().authenticated())
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

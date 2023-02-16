@@ -1,6 +1,6 @@
-package com.cryptos.apigateway.security.service;
+package com.cryptos.apigateway.service;
 
-import com.cryptos.apigateway.security.rest.CustomerRestService;
+import com.cryptos.apigateway.rest.CustomerRestService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

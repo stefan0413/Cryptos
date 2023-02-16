@@ -1,8 +1,8 @@
-package com.cryptos.apigateway.security.rest;
+package com.cryptos.apigateway.rest;
 
-import com.cryptos.apigateway.security.model.Customer;
-import com.cryptos.apigateway.security.model.requests.FinaliseRegistrationRequest;
-import com.cryptos.apigateway.security.model.requests.RegistrationRequest;
+import com.cryptos.apigateway.model.Customer;
+import com.cryptos.apigateway.model.requests.FinaliseRegistrationRequest;
+import com.cryptos.apigateway.model.requests.RegistrationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

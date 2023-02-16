@@ -1,4 +1,4 @@
-package com.cryptos.apigateway.security.model;
+package com.cryptos.apigateway.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

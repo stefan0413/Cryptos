@@ -1,4 +1,4 @@
-package com.cryptos.apigateway.security.config;
+package com.cryptos.apigateway.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,12 +21,14 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter
 	private static final String authenticationTokenType = "Bearer";
 	private final UserDetailsService userDetailsService;
 	private final JwtUtils jwtUtils;
+	private final JwtBlacklistService jwtBlacklistService;
 
 	public JWTAuthenticationFilter(UserDetailsService userDetailsService,
-								   JwtUtils jwtUtils)
+								   JwtUtils jwtUtils, JwtBlacklistService jwtBlacklistService)
 	{
 		this.userDetailsService = userDetailsService;
 		this.jwtUtils = jwtUtils;
+		this.jwtBlacklistService = jwtBlacklistService;
 	}
 
 	@Override
@@ -34,6 +36,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter
 									HttpServletResponse response,
 									FilterChain filterChain) throws ServletException, IOException
 	{
+		System.out.println("hello");
 
 		String authenticationHeader = request.getHeader("Authorization");
 		String userEmail;
@@ -48,11 +51,17 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter
 		jwtToken = authenticationHeader.substring(7);
 		userEmail = jwtUtils.extractUsername(jwtToken);
 
+
+
 		if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null)
 		{
 			UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-			if (jwtUtils.validateToken(jwtToken,userDetails))
+			System.out.println("ValidateToken: " + jwtUtils.validateToken(jwtToken,userDetails));
+			System.out.println("CheckToken: " + jwtToken);
+			System.out.println("IsBlacklisted: " + jwtBlacklistService.isTokenBlacklisted(jwtToken));
+
+			if (jwtUtils.validateToken(jwtToken,userDetails) && !jwtBlacklistService.isTokenBlacklisted(jwtToken))
 			{
 				UsernamePasswordAuthenticationToken authenticationToken =
 						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
