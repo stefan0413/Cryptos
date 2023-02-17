@@ -1,5 +1,6 @@
 package com.cryptos.apigateway.jwt;
 
+import io.lettuce.core.codec.StringCodec;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +9,7 @@ import java.util.Set;
 @Service
 public class JwtBlacklistService
 {
+
 	private final RedisTemplate<String, String> redisTemplate;
 	private final JwtUtils jwtUtils;
 
@@ -17,22 +19,28 @@ public class JwtBlacklistService
 		this.jwtUtils = jwtUtils;
 	}
 
-	public void addTokenToBlacklist(String token) {
+	public void addTokenToBlacklist(String token)
+	{
 		redisTemplate.opsForSet().add("blacklist", token);
 	}
 
-	public boolean isTokenBlacklisted(String token) {
+	public boolean isTokenBlacklisted(String token)
+	{
 		return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember("blacklist", token));
 	}
 
-	public void deleteExpiredTokens() {
+	public void deleteExpiredTokens()
+	{
 		Set<String> tokens = redisTemplate.opsForSet().members("blacklist");
-		if (tokens != null) {
-			for (String token : tokens) {
-				if (jwtUtils.isTokenExpired(token)) {
-					redisTemplate.opsForSet().remove("blacklist", token);
+		if (tokens != null)
+		{
+			for (String token : tokens)
+			{
+					if (jwtUtils.isTokenExpired(token))
+					{
+						redisTemplate.opsForSet().remove("blacklist", token);
+					}
 				}
 			}
 		}
 	}
-}

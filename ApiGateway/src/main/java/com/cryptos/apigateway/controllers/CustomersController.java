@@ -54,7 +54,6 @@ public class CustomersController
 	@PostMapping("/private/log-out")
 	public void logOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken)
 	{
-		System.out.println("Token: " + jwtToken.substring(7));
 		jwtBlacklistService.addTokenToBlacklist(jwtToken.substring(7));
 	}
 
