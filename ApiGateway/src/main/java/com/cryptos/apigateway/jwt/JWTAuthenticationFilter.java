@@ -36,8 +36,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter
 									HttpServletResponse response,
 									FilterChain filterChain) throws ServletException, IOException
 	{
-		System.out.println("hello");
-
 		String authenticationHeader = request.getHeader("Authorization");
 		String userEmail;
 		String jwtToken;
@@ -56,10 +54,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter
 		if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null)
 		{
 			UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-
-			System.out.println("ValidateToken: " + jwtUtils.validateToken(jwtToken,userDetails));
-			System.out.println("CheckToken: " + jwtToken);
-			System.out.println("IsBlacklisted: " + jwtBlacklistService.isTokenBlacklisted(jwtToken));
 
 			if (jwtUtils.validateToken(jwtToken,userDetails) && !jwtBlacklistService.isTokenBlacklisted(jwtToken))
 			{
