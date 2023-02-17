@@ -5,6 +5,7 @@ import com.cryptos.apigateway.model.requests.FinaliseRegistrationRequest;
 import com.cryptos.apigateway.model.requests.RegistrationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,31 +13,34 @@ import org.springframework.web.client.RestTemplate;
 public class CustomerRestService
 {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private final String GET_CUSTOMER_BY_EMAIL_URL;
+	private final String REGISTER_URL;
+	private final String FINALISE_REGISTRATION_URL;
 	private final RestTemplate restTemplate = new RestTemplate();
+
+	public CustomerRestService(@Value("${customers.get-by-email-url}") String getCustomerByEmail,
+							   @Value("${customers.register-url}") String registerUrl,
+							   @Value("${customers.finalise-registration-url}") String finaliseRegistrationUrl)
+	{
+		GET_CUSTOMER_BY_EMAIL_URL = getCustomerByEmail;
+		REGISTER_URL = registerUrl;
+		FINALISE_REGISTRATION_URL = finaliseRegistrationUrl;
+		restTemplate.setErrorHandler(new CustomerResponseErrorHandler());
+	}
 
 
 	public Customer getCustomerDataByEmail(String email)
 	{
-		String url = "http://localhost:9090/private/customers/search?email={email}";
-
-		Customer customer = restTemplate.getForObject(url, Customer.class, email);
-		logger.info(customer.toString());
-
-		return customer;
+		return restTemplate.getForObject(GET_CUSTOMER_BY_EMAIL_URL, Customer.class, email);
 	}
 
 	public Long registerCustomer(RegistrationRequest registrationRequest)
 	{
-		String url = "http://localhost:9090/private/customers/authentication/register";
-
-		return restTemplate.postForObject(url, registrationRequest, Long.class);
+		return restTemplate.postForObject(REGISTER_URL, registrationRequest, Long.class);
 	}
 
 	public Customer finaliseCustomerRegistration(Long customerId, FinaliseRegistrationRequest finaliseRegistrationRequest)
 	{
-		String url = "http://localhost:9090/private/customers/authentication/{customerId}/finalise-registration";
-
-		return restTemplate.postForObject(url, finaliseRegistrationRequest, Customer.class, customerId);
+		return restTemplate.postForObject(FINALISE_REGISTRATION_URL, finaliseRegistrationRequest, Customer.class, customerId);
 	}
 }
