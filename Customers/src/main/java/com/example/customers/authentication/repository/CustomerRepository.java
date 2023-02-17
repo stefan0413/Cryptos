@@ -41,18 +41,18 @@ public class CustomerRepository
 		final String sql = "SELECT * FROM customer WHERE id = :id";
 
 		Map<String, Object> params = Map.of("id", id);
-		return Optional.of(namedParameterJdbcTemplate.queryForObject(sql, params,
-																	 new DataClassRowMapper<>(Customer.class)));
+		return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, params,
+																			 new DataClassRowMapper<>(Customer.class)));
 	}
 
-	public Optional<Customer> getCustomerByEmail(String email)
+	public Customer getCustomerByEmail(String email)
 	{
 		final String sql = "SELECT * FROM customer WHERE email = :email";
 
 		Map<String, Object> params = Map.of("email", email);
 
-		return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, params,
-																			 new DataClassRowMapper<>(Customer.class)));
+		return namedParameterJdbcTemplate.queryForObject(sql, params,
+														 new DataClassRowMapper<>(Customer.class));
 	}
 
 	public Long registerCustomer(RegistrationRequest registrationRequest)
@@ -60,7 +60,7 @@ public class CustomerRepository
 		Map<String, Object> parameters = Map.of("email", registrationRequest.email(),
 												"password", registrationRequest.password());
 
-		return  simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+		return simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 	}
 
 	public void finaliseRegistration(long customerId, FinaliseRegistrationRequest finaliseRegistrationRequest)

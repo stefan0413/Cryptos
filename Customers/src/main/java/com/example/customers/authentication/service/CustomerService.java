@@ -6,6 +6,7 @@ import com.example.customers.authentication.model.CustomerData;
 import com.example.customers.authentication.repository.CustomerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +26,15 @@ public class CustomerService
 
 	public Customer getCustomerByEmail(String email)
 	{
-		return customerRepository.getCustomerByEmail(email)
-								 .orElseThrow(() -> new NoSuchCustomerException(String.format("Customer with email: %s is not found", email)));
+
+		try
+		{
+			return customerRepository.getCustomerByEmail(email);
+		}
+		catch (EmptyResultDataAccessException ex)
+		{
+			throw new NoSuchCustomerException(String.format("Customer with email: %s is not found", email));
+		}
 	}
 
 	public Customer getCustomerById(long customerId)

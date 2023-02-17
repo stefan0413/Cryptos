@@ -5,3 +5,7 @@ spring:
     redis:
       host: localhost
       port: 6379
+customers:
+  get-by-email-url: http://localhost:9090/private/customers/search?email={email}
+  register-url: http://localhost:9090/private/customers/authentication/register
+  finalise-registration-url: http://localhost:9090/private/customers/authentication/{customerId}/finalise-registration

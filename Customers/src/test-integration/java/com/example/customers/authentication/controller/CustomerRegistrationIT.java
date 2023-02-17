@@ -2,7 +2,6 @@ package com.example.customers.authentication.controller;
 
 import com.example.customers.BaseIntegrationTest;
 import com.example.customers.authentication.model.Customer;
-import com.example.customers.authentication.model.CustomerResponse;
 import com.example.customers.authentication.model.FinaliseRegistrationRequest;
 import com.example.customers.authentication.model.RegistrationRequest;
 import com.example.customers.authentication.repository.CustomerRepository;
@@ -15,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CustomerRegistrationIT extends BaseIntegrationTest
 {
 
-	private final String REGISTRATION_URL = "/api/v1/customers/authentication/register";
-	private final String FINALIZE_REGISTRATION_URL = "/api/v1/customers/authentication/{customerId}/finalise-registration";
+	private final String REGISTRATION_URL = "/private/customers/authentication/register";
+	private final String FINALIZE_REGISTRATION_URL = "/private/customers/authentication/{customerId}/finalise-registration";
 	private final String EMAIL = "test@email.com";
 	private final String PASSWORD = "W%mG9dt#jjni@x";
 
@@ -26,8 +25,8 @@ public class CustomerRegistrationIT extends BaseIntegrationTest
 	@Test
 	void registerCustomerWithCorrectDataShouldSaveCustomer()
 	{
-		testRestTemplate.postForObject(REGISTRATION_URL, new RegistrationRequest(EMAIL, PASSWORD), CustomerResponse.class);
-		Customer actualCustomer = customerRepository.getCustomerByEmail(EMAIL).get();
+		testRestTemplate.postForObject(REGISTRATION_URL, new RegistrationRequest(EMAIL, PASSWORD), Long.class);
+		Customer actualCustomer = customerRepository.getCustomerByEmail(EMAIL);
 
 		assertTrue(areCustomersEqual(buildExpectedCustomer(), actualCustomer));
 	}
@@ -35,23 +34,17 @@ public class CustomerRegistrationIT extends BaseIntegrationTest
 	@Test
 	void fullyRegisterCustomerWithCorrectDataShouldSaveCustomerAndFinalizeTheRegistration()
 	{
-		Long customerId = Long.valueOf(
-				testRestTemplate.postForObject(REGISTRATION_URL,
+		Long customerId = testRestTemplate.postForObject(REGISTRATION_URL,
 											   new RegistrationRequest(EMAIL, PASSWORD),
-											   CustomerResponse.class).value()
-									  );
+											   Long.class);
 
-		String responseJWT = testRestTemplate.postForObject(FINALIZE_REGISTRATION_URL,
-									   new FinaliseRegistrationRequest("firstName",
-																	   "secondName",
-																	   "lastName",
-																	   "+359 888504407"),
-									   CustomerResponse.class, customerId).value();
+		testRestTemplate.postForObject(FINALIZE_REGISTRATION_URL,
+									   new FinaliseRegistrationRequest("firstName", "secondName", "lastName", "+359 888504407"),
+									   Void.class, customerId);
 
 		Customer actualFinalisedCustomer = customerRepository.getCustomerById(customerId).get();
 
 		assertTrue(areFinalisedCustomersEqual(buildExpectedFinalisedCustomer(), actualFinalisedCustomer));
-		assertEquals("jwtToken", responseJWT);
 	}
 
 	private boolean areCustomersEqual(Customer expected, Customer actual)

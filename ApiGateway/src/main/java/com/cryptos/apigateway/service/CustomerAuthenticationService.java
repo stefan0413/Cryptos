@@ -1,5 +1,6 @@
 package com.cryptos.apigateway.service;
 
+import com.cryptos.apigateway.exceptions.CustomerException;
 import com.cryptos.apigateway.rest.CustomerRestService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
