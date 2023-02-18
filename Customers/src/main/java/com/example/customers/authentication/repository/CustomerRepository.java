@@ -82,15 +82,15 @@ public class CustomerRepository
 		namedParameterJdbcTemplate.update(sql, parameters);
 	}
 
-	public List<CustomerData> getCustomerDataById(long customerId)
+	public List<CustomerData> getCustomerDataById(long id)
 	{
 		final String sql = """
 				SELECT id, email, first_name, second_name, last_name, mobile_number
 				FROM customer
 				WHERE id = :id""";
 
-		Map<String, Object> params = Map.of("id", customerId);
-
+		Map<String, Object> params = Map.of("id", id);
+		System.out.println("hello");
 		return namedParameterJdbcTemplate.query(sql, params, customerDataRowMapper);
 	}
 }

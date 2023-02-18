@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/payments/customers/{customerId}")
+@RequestMapping("/private/payments/{customerId}/")
 public class PaymentCustomerController
 {
 
@@ -25,10 +25,10 @@ public class PaymentCustomerController
 		this.paymentCustomerService = paymentCustomerService;
 	}
 
-	@PostMapping("/create")
-	public String createPaymentCustomer(@PathVariable Long customerId) throws StripeException
+	@PostMapping("/customer-stripe-accounts/create")
+	public void createPaymentCustomer(@PathVariable Long customerId) throws StripeException
 	{
-		return paymentCustomerService.createCustomer(customerId);
+		paymentCustomerService.createCustomer(customerId);
 	}
 
 	@PostMapping("/payment-methods/add")

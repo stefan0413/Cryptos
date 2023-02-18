@@ -2,13 +2,18 @@ package com.example.payment.config;
 
 import com.stripe.Stripe;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class StripeConfig
 {
+	String stripeApiKey;
 
-	private String stripeApiKey = "sk_test_51MH0dvCucZ6lucMqNVBvffVtbqwA8kucCFkzmNS421Q7nEGu05Xnn3CM5ChaaDBJO65FhdgQQJnFMmpeNZRXgAV600Ocp05xfs";
+	public StripeConfig(@Value("${stripe.api-key}") String stripeApiKey)
+	{
+		this.stripeApiKey = stripeApiKey;
+	}
 
 	@PostConstruct
 	public void init()
