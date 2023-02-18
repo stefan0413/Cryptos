@@ -1,8 +1,7 @@
 package com.example.payment.rest;
 
 import com.example.payment.model.CustomerDataResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,13 +9,17 @@ import org.springframework.web.client.RestTemplate;
 public class CustomerRestService
 {
 
+	private final String GET_CUSTOMER_BY_ID_URL;
+
 	private final RestTemplate restTemplate = new RestTemplate();
+
+	public CustomerRestService(@Value("${customers.get-customer-by-id-url}") String GET_CUSTOMER_BY_ID_URL)
+	{
+		this.GET_CUSTOMER_BY_ID_URL = GET_CUSTOMER_BY_ID_URL;
+	}
 
 	public CustomerDataResponse getCustomerDataById(long customerId)
 	{
-		String url = "http://localhost:9090/api/customers/data/{customerId}";
-		CustomerDataResponse customerDataResponse = restTemplate.getForObject(url, CustomerDataResponse.class, customerId);
-
-		return customerDataResponse;
+		return restTemplate.getForObject(GET_CUSTOMER_BY_ID_URL, CustomerDataResponse.class, customerId);
 	}
 }
