@@ -67,6 +67,14 @@
 			<version>3.0.0</version>
 		</dependency>
 		<!-- End of Swagger -->
+
+		<!--Currency converter-->
+		<dependency>
+			<groupId>javax.money</groupId>
+			<artifactId>money-api</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<!--End of Currency converter-->
 	</dependencies>
 
 	<build>

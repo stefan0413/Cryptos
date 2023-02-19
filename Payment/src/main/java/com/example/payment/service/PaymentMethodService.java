@@ -24,7 +24,6 @@ public class PaymentMethodService
 	public void addPaymentMethodToCustomer(long customerId, String methodToken) throws StripeException
 	{
 		PaymentSource paymentSource = addPaymentMethodToStripe(customerId, methodToken);
-		System.out.println(paymentSource.getId());
 		savePaymentMethod(customerId, methodToken, paymentSource.getId());
 	}
 

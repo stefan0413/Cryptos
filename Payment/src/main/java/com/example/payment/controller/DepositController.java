@@ -1,6 +1,6 @@
 package com.example.payment.controller;
 
-import com.example.payment.service.PaymentService;
+import com.example.payment.service.DepositService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,15 +11,14 @@ import java.math.BigDecimal;
 
 
 @RestController
-@RequestMapping("/api/payments/{customerId}/payment-intents")
+@RequestMapping("/private/payments/payment-intents/{customerId}")
 public class DepositController
 {
 
-	private final PaymentService paymentService;
-
-	public DepositController(PaymentService paymentService)
+	private final DepositService depositService;
+	public DepositController(DepositService depositService)
 	{
-		this.paymentService = paymentService;
+		this.depositService = depositService;
 	}
 
 	@PostMapping("/create")
@@ -28,13 +27,13 @@ public class DepositController
 									  @RequestParam String currency,
 									  @RequestParam BigDecimal amount) throws Exception
 	{
-		return paymentService.createPaymentIntent(customerId, paymentMethodId, currency, amount);
+		return depositService.createPaymentIntent(customerId, paymentMethodId, currency, amount);
 	}
 
 	@PostMapping("/confirm")
 	public void confirmPaymentIntent(@PathVariable long customerId,
 									   @RequestParam String paymentIntentId) throws Exception
 	{
-		paymentService.confirmPaymentIntent(customerId, paymentIntentId);
+		depositService.confirmPaymentIntent(customerId, paymentIntentId);
 	}
 }
