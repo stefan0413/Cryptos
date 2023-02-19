@@ -1,19 +1,27 @@
 package com.example.payment.repository.row_mappers;
 
-import com.example.payment.model.CustomerStripeAccountRequest;
+import com.example.payment.model.CustomerStripeAccount;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
-public class CustomerStripeAccountRowMapper implements RowMapper<CustomerStripeAccountRequest>
+public class CustomerStripeAccountRowMapper implements RowMapper<CustomerStripeAccount>
 {
 
-	@Override public CustomerStripeAccountRequest mapRow(ResultSet rs, int rowNum) throws SQLException
+	@Override public CustomerStripeAccount mapRow(ResultSet rs, int rowNum) throws SQLException
 	{
-		return null;
+		return new CustomerStripeAccount(rs.getLong("id"),
+										 rs.getLong("customer_id"),
+										 rs.getString("currency"),
+										 rs.getBigDecimal("free_balance"),
+										 rs.getBigDecimal("invested_balance"),
+										 rs.getString("email"),
+										 rs.getString("names"),
+										 List.of());
 	}
 }

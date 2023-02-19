@@ -12,12 +12,12 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/payments/{customerId}/payment-intents")
-public class PaymentController
+public class DepositController
 {
 
 	private final PaymentService paymentService;
 
-	public PaymentController(PaymentService paymentService)
+	public DepositController(PaymentService paymentService)
 	{
 		this.paymentService = paymentService;
 	}
