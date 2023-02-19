@@ -1,11 +1,12 @@
 package com.example.payment.service;
 
 import com.example.payment.model.CustomerDataResponse;
+import com.example.payment.model.CustomerPaymentMethod;
+import com.example.payment.model.CustomerStripeAccount;
 import com.example.payment.model.CustomerStripeAccountRequest;
 import com.example.payment.repository.CustomerStripeAccountRepository;
 import com.example.payment.rest.CustomerRestService;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Card;
 import com.stripe.model.Customer;
 import org.springframework.stereotype.Service;
 
@@ -15,39 +16,49 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class PaymentCustomerService
+public class CustomerStripeAccountService
 {
 
 	private final CustomerRestService customerRestService;
 	private final CustomerStripeAccountRepository customerStripeAccountRepository;
+	private final PaymentMethodService paymentMethodService;
 
-	public PaymentCustomerService(CustomerRestService customerRestService, CustomerStripeAccountRepository customerStripeAccountRepository)
+	public CustomerStripeAccountService(CustomerRestService customerRestService, CustomerStripeAccountRepository customerStripeAccountRepository, PaymentMethodService paymentMethodService)
 	{
 		this.customerRestService = customerRestService;
 		this.customerStripeAccountRepository = customerStripeAccountRepository;
+		this.paymentMethodService = paymentMethodService;
 	}
 
-	public void createCustomer(Long customerId) throws StripeException
+	public void createCustomer(long customerId, String currencyCode) throws StripeException
 	{
 		CustomerDataResponse customerData = customerRestService.getCustomerDataById(customerId);
-		System.out.println("CustomerData:" + customerData.toString());
+
 		createStripeCustomer(customerData);
-		saveCustomerStripeAccount(customerData);
+		saveCustomerStripeAccount(customerData, currencyCode);
 	}
 
-	public String addPaymentMethodToCustomer(long customerId, String methodToken) throws StripeException
+	public CustomerStripeAccount getFullCustomer(long customerId)
 	{
+		CustomerStripeAccount customerStripeAccount =
+				customerStripeAccountRepository.getCustomerStripeAccountByCustomerId(customerId);
 
-		List<String> expandList = List.of("sources");
-		Map<String, Object> retrieveParams = Map.of("expand", expandList);
+		List<CustomerPaymentMethod> paymentMethods = paymentMethodService.getPaymentMethodsForCustomer(customerId);
 
-		Customer customer = Customer.retrieve(String.valueOf(customerId), retrieveParams, null);
 
-		Map<String, Object> params = Map.of("source", methodToken);
+		return buildFullCustomerStripeAccount(customerStripeAccount, paymentMethods);
+	}
 
-		Card card = (Card) customer.getSources().create(params);
-
-		return card.toJson();
+	private CustomerStripeAccount buildFullCustomerStripeAccount(CustomerStripeAccount customer,
+																 List<CustomerPaymentMethod> paymentMethods){
+		return new CustomerStripeAccount(customer.id(),
+										 customer.customerId(),
+										 customer.currency(),
+										 customer.freeBalance(),
+										 customer.investedBalance(),
+										 customer.email(),
+										 customer.names(),
+										 paymentMethods);
 	}
 
 	private void createStripeCustomer(CustomerDataResponse customerData) throws StripeException
@@ -60,10 +71,11 @@ public class PaymentCustomerService
 		Customer.create(customerParameters);
 	}
 
-	private void saveCustomerStripeAccount(CustomerDataResponse customerData)
+	private void saveCustomerStripeAccount(CustomerDataResponse customerData, String currencyCode)
 	{
 		CustomerStripeAccountRequest customerStripeAccountRequest =
 				new CustomerStripeAccountRequest(customerData.customerId(),
+												 currencyCode,
 												 BigDecimal.ZERO,
 												 BigDecimal.ZERO,
 												 customerData.email(),
@@ -81,6 +93,6 @@ public class PaymentCustomerService
 
 	private static String removeNullNames(String name)
 	{
-		return name != null ? name + " " : "";
+		return name != null ? (name + " ") : "";
 	}
 }

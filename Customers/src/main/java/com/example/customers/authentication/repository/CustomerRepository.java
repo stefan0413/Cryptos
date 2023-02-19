@@ -89,8 +89,6 @@ public class CustomerRepository
 				FROM customer
 				WHERE id = :id""";
 
-		Map<String, Object> params = Map.of("id", id);
-		System.out.println("hello");
-		return namedParameterJdbcTemplate.query(sql, params, customerDataRowMapper);
+		return namedParameterJdbcTemplate.query(sql, Map.of("id", id), customerDataRowMapper);
 	}
 }

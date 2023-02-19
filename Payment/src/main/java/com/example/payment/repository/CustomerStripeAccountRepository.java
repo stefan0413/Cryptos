@@ -1,5 +1,6 @@
 package com.example.payment.repository;
 
+import com.example.payment.model.CustomerStripeAccount;
 import com.example.payment.model.CustomerStripeAccountRequest;
 import com.example.payment.repository.row_mappers.CustomerStripeAccountRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,7 +12,7 @@ import java.util.Map;
 public class CustomerStripeAccountRepository
 {
 
-	private static final String BASE_SELECT_QUERY = "SELECT * FROM customer_stripe_accounts ";
+	private static final String BASE_SELECT_QUERY = "SELECT * FROM customer_stripe_account ";
 
 	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private final CustomerStripeAccountRowMapper customerStripeAccountRowMapper;
@@ -26,10 +27,11 @@ public class CustomerStripeAccountRepository
 	public void save(CustomerStripeAccountRequest customerStripeAccountRequest)
 	{
 		String sql = """
-    		    INSERT INTO customer_stripe_accounts (customer_id, free_balance, invested_balance, email, names)
-    		    VALUES(:customer_id, :free_balance, :invested_balance, :email, :names)
+    		    INSERT INTO customer_stripe_account (customer_id, currency_code, free_balance, invested_balance, email, names)
+    		    VALUES(:customer_id, :currency_code, :free_balance, :invested_balance, :email, :names)
 				""";
 		Map<String, Object> params = Map.of("customer_id", customerStripeAccountRequest.customerId(),
+											"currency_code", customerStripeAccountRequest.currencyCode(),
 											"free_balance", customerStripeAccountRequest.freeBalance(),
 											"invested_balance", customerStripeAccountRequest.investedBalance(),
 											"email", customerStripeAccountRequest.email(),
@@ -37,7 +39,7 @@ public class CustomerStripeAccountRepository
 		namedParameterJdbcTemplate.update(sql, params);
 	}
 
-	public CustomerStripeAccountRequest getCustomerStripeAccountByCustomerId(long customerId)
+	public CustomerStripeAccount getCustomerStripeAccountByCustomerId(long customerId)
 	{
 		String sql = BASE_SELECT_QUERY + "WHERE customer_id=:customer_id";
 		return namedParameterJdbcTemplate.queryForObject(sql, Map.of("customer_id", customerId), customerStripeAccountRowMapper);
