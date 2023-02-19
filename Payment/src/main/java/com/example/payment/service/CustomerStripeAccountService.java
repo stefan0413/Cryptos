@@ -50,7 +50,8 @@ public class CustomerStripeAccountService
 	}
 
 	private CustomerStripeAccount buildFullCustomerStripeAccount(CustomerStripeAccount customer,
-																 List<CustomerPaymentMethod> paymentMethods){
+																 List<CustomerPaymentMethod> paymentMethods)
+	{
 		return new CustomerStripeAccount(customer.id(),
 										 customer.customerId(),
 										 customer.currency(),
