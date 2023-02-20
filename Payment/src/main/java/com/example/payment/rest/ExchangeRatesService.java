@@ -1,12 +1,9 @@
 package com.example.payment.rest;
 
-import com.example.payment.model.CustomerDataResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
 @Service

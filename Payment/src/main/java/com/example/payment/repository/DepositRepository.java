@@ -1,9 +1,12 @@
 package com.example.payment.repository;
 
+import com.example.payment.model.Deposit;
 import com.example.payment.model.DepositRequest;
+import com.example.payment.repository.row_mappers.DepositRowmapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -11,10 +14,12 @@ public class DepositRepository
 {
 
 	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	private final DepositRowmapper depositRowmapper;
 
-	public DepositRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate)
+	public DepositRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, DepositRowmapper depositRowmapper)
 	{
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+		this.depositRowmapper = depositRowmapper;
 	}
 
 	public void save(DepositRequest depositRequest)
@@ -45,5 +50,12 @@ public class DepositRepository
 											"name", status);
 
 		namedParameterJdbcTemplate.update(sql, params);
+	}
+
+	public List<Deposit> getAllDepositsForCustomer(long customerId)
+	{
+		String sql = "SELECT * FROM deposit WHERE customer_id = :customer_id";
+
+		return namedParameterJdbcTemplate.query(sql, Map.of("customer_id", customerId), depositRowmapper);
 	}
 }
