@@ -6,6 +6,7 @@ import com.example.payment.repository.row_mappers.CustomerStripeAccountRowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Repository
@@ -27,8 +28,8 @@ public class CustomerStripeAccountRepository
 	public void save(CustomerStripeAccountRequest customerStripeAccountRequest)
 	{
 		String sql = """
-    		    INSERT INTO customer_stripe_account (customer_id, currency_code, free_balance, invested_balance, email, names)
-    		    VALUES(:customer_id, :currency_code, :free_balance, :invested_balance, :email, :names)
+						    INSERT INTO customer_stripe_account (customer_id, currency_code, free_balance, invested_balance, email, names)
+						    VALUES(:customer_id, :currency_code, :free_balance, :invested_balance, :email, :names)
 				""";
 		Map<String, Object> params = Map.of("customer_id", customerStripeAccountRequest.customerId(),
 											"currency_code", customerStripeAccountRequest.currencyCode(),
@@ -36,6 +37,21 @@ public class CustomerStripeAccountRepository
 											"invested_balance", customerStripeAccountRequest.investedBalance(),
 											"email", customerStripeAccountRequest.email(),
 											"names", customerStripeAccountRequest.names());
+		namedParameterJdbcTemplate.update(sql, params);
+	}
+
+	public void updateCustomerBalance(Long customerId, BigDecimal freeBalance, BigDecimal investedBalance)
+	{
+		String sql = """
+				UPDATE customer_stripe_account SET
+				free_balance = :free_balance,
+				invested_balance = :invested_balance
+				WHERE customer_id = :customer_id
+				""";
+		Map<String, Object> params = Map.of("customer_id", customerId,
+											"free_balance", freeBalance,
+											"invested_balance", investedBalance);
+
 		namedParameterJdbcTemplate.update(sql, params);
 	}
 

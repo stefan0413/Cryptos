@@ -1,5 +1,6 @@
 package com.example.payment.service;
 
+import com.example.payment.model.CustomerStripeAccount;
 import com.example.payment.model.DepositRequest;
 import com.example.payment.model.DepositStatus;
 import com.example.payment.repository.DepositRepository;
@@ -10,7 +11,6 @@ import com.stripe.param.PaymentIntentCreateParams;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -32,9 +32,10 @@ public class DepositService
 
 	public String createPaymentIntent(long customerId, String paymentMethodId, String currency, BigDecimal amount) throws Exception
 	{
-		String customerCurrencyCode = getCustomerCurrencyCode(customerId);
-		BigDecimal amountInCustomerCurrency = CurrencyConversionService.convertAmountFromToCurrency(amount, currency, customerCurrencyCode);
+		CustomerStripeAccount customer = getFullCustomer(customerId);
 
+		String customerCurrencyCode = customer.currency().toUpperCase();
+		BigDecimal amountInCustomerCurrency = CurrencyConversionService.convertAmountFromToCurrency(amount, currency, customerCurrencyCode);
 		if (paymentMethodId == null)
 		{
 			paymentMethodId = getDefaultPaymentMethod(customerId);
@@ -62,7 +63,8 @@ public class DepositService
 
 			BigDecimal convertedAmountToSystemCurrency = CurrencyConversionService.convertAmountFromToCurrency(convertStripeAmountToAmount(paymentIntent.getAmount()),
 																											   paymentIntent.getCurrency().toUpperCase(), SYSTEM_CURRENCY_CODE);
-			updateCustomerBalance(customerId, convertedAmountToSystemCurrency);
+			updateCustomerBalanceInStripe(customerId, convertedAmountToSystemCurrency);
+			updateCustomerBalance(getFullCustomer(customerId), convertedAmountToSystemCurrency);
 		}
 		else
 		{
@@ -70,9 +72,9 @@ public class DepositService
 		}
 	}
 
-	private String getCustomerCurrencyCode(long customerId)
+	private CustomerStripeAccount getFullCustomer(long customerId)
 	{
-		return customerStripeAccountService.getFullCustomer(customerId).currency().toUpperCase();
+		return customerStripeAccountService.getFullCustomer(customerId);
 	}
 
 	private String getDefaultPaymentMethod(long customerId) throws StripeException
@@ -87,10 +89,15 @@ public class DepositService
 
 	private BigDecimal convertStripeAmountToAmount(Long amount)
 	{
-		return BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(100), new MathContext(2));
+		return BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_HALF_UP);
 	}
 
-	private void updateCustomerBalance(long customerId, BigDecimal amount) throws StripeException
+	private void updateCustomerBalance(CustomerStripeAccount customer, BigDecimal amount)
+	{
+		customerStripeAccountService.updateCustomerBalance(customer.customerId(), customer.freeBalance().add(amount), customer.investedBalance());
+	}
+
+	private void updateCustomerBalanceInStripe(long customerId, BigDecimal amount) throws StripeException
 	{
 		Customer customer = Customer.retrieve(String.valueOf(customerId));
 

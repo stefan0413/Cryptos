@@ -49,6 +49,11 @@ public class CustomerStripeAccountService
 		return buildFullCustomerStripeAccount(customerStripeAccount, paymentMethods);
 	}
 
+	public void updateCustomerBalance(Long customerId, BigDecimal freeBalance, BigDecimal investedBalance)
+	{
+		customerStripeAccountRepository.updateCustomerBalance(customerId, freeBalance, investedBalance);
+	}
+
 	private CustomerStripeAccount buildFullCustomerStripeAccount(CustomerStripeAccount customer,
 																 List<CustomerPaymentMethod> paymentMethods)
 	{
