@@ -1,16 +1,15 @@
 package com.example.payment.service;
 
-import com.example.payment.exception.PaymentsException;
-import com.example.payment.model.CustomerStripeAccount;
-import com.example.payment.model.Deposit;
-import com.example.payment.model.DepositRequest;
-import com.example.payment.model.DepositStatus;
+import com.example.payment.model.customer_stripe_account.CustomerStripeAccount;
+import com.example.payment.model.deposit.Deposit;
+import com.example.payment.model.deposit.DepositRequest;
+import com.example.payment.model.deposit.DepositResponseWrapper;
+import com.example.payment.model.deposit.DepositStatus;
 import com.example.payment.repository.DepositRepository;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -42,7 +41,7 @@ public class DepositService
 
 		String customerCurrencyCode = customer.currency().toUpperCase();
 		BigDecimal amountInCustomerCurrency = currencyConversionService.convertAmountFromToCurrency(amount, currency, customerCurrencyCode);
-		if (paymentMethodId == null)
+		if (paymentMethodId == null || paymentMethodId.equals(""))
 		{
 			paymentMethodId = getDefaultPaymentMethod(customerId);
 		}
@@ -59,21 +58,21 @@ public class DepositService
 		return paymentIntentId;
 	}
 
-	public List<Deposit> getCustomerDeposits(long customerId)
+	public DepositResponseWrapper getCustomerDeposits(long customerId)
 	{
-		return depositRepository.getAllDepositsForCustomer(customerId);
+		return new DepositResponseWrapper(depositRepository.getAllDepositsForCustomer(customerId));
 	}
 
 	public void confirmPaymentIntent(long customerId, String paymentIntentId) throws StripeException
 	{
 		PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
 
-		paymentIntent.confirm();
-		updateCustomerAndDepositData(customerId, paymentIntent);
+		updateCustomerAndDepositData(customerId, paymentIntent.confirm());
 	}
 
 	private void updateCustomerAndDepositData(long customerId, PaymentIntent paymentIntent) throws StripeException
 	{
+		System.out.println("PaymentIntentStatus: " + paymentIntent.getStatus());
 		if (paymentIntent.getStatus().equals(SUCCEEDED))
 		{
 			depositRepository.updateStatus(paymentIntent.getId(), DepositStatus.EXECUTED.name());

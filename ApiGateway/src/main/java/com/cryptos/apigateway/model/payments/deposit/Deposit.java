@@ -1,4 +1,4 @@
-package com.example.payment.model;
+package com.cryptos.apigateway.model.payments.deposit;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

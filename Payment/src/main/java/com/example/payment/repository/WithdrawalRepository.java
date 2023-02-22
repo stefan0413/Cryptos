@@ -1,8 +1,8 @@
 package com.example.payment.repository;
 
-import com.example.payment.model.Withdrawal;
-import com.example.payment.model.WithdrawalRequest;
-import com.example.payment.model.WithdrawalStatus;
+import com.example.payment.model.withdrawal.Withdrawal;
+import com.example.payment.model.withdrawal.WithdrawalRequest;
+import com.example.payment.model.withdrawal.WithdrawalStatus;
 import com.example.payment.repository.row_mappers.WithdrawalRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;

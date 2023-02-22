@@ -1,4 +1,6 @@
-package com.example.payment.model;
+package com.example.payment.model.customer_stripe_account;
+
+import com.example.payment.model.payment_method.CustomerPaymentMethod;
 
 import java.math.BigDecimal;
 import java.util.List;

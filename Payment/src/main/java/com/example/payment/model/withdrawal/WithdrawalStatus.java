@@ -1,4 +1,4 @@
-package com.example.payment.model;
+package com.example.payment.model.withdrawal;
 
 public enum WithdrawalStatus
 {

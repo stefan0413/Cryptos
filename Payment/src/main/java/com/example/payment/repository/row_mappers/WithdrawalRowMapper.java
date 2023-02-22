@@ -1,7 +1,7 @@
 package com.example.payment.repository.row_mappers;
 
-import com.example.payment.model.Withdrawal;
-import com.example.payment.model.WithdrawalStatus;
+import com.example.payment.model.withdrawal.Withdrawal;
+import com.example.payment.model.withdrawal.WithdrawalStatus;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,6 @@
 package com.example.payment.service;
 
-import com.example.payment.model.CustomerPaymentMethod;
-import com.example.payment.model.CustomerPaymentMethodResponseWrapper;
+import com.example.payment.model.payment_method.CustomerPaymentMethodResponseWrapper;
 import com.example.payment.repository.PaymentMethodRepository;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;

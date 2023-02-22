@@ -1,9 +1,9 @@
 package com.example.payment.service;
 
 import com.example.payment.model.CustomerDataResponse;
-import com.example.payment.model.CustomerPaymentMethod;
-import com.example.payment.model.CustomerStripeAccount;
-import com.example.payment.model.CustomerStripeAccountRequest;
+import com.example.payment.model.payment_method.CustomerPaymentMethod;
+import com.example.payment.model.customer_stripe_account.CustomerStripeAccount;
+import com.example.payment.model.customer_stripe_account.CustomerStripeAccountRequest;
 import com.example.payment.repository.CustomerStripeAccountRepository;
 import com.example.payment.rest.CustomerRestService;
 import com.stripe.exception.StripeException;

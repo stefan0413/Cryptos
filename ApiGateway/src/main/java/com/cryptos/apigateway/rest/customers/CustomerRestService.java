@@ -3,7 +3,7 @@ package com.cryptos.apigateway.rest.customers;
 import com.cryptos.apigateway.model.customers.Customer;
 import com.cryptos.apigateway.model.customers.FinaliseRegistrationRequest;
 import com.cryptos.apigateway.model.customers.RegistrationRequest;
-import com.cryptos.apigateway.rest.ResponseErrorHandler;
+import com.cryptos.apigateway.rest.ServicesResponseErrorHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,7 +24,7 @@ public class CustomerRestService
 		GET_CUSTOMER_BY_EMAIL_URL = getCustomerByEmail;
 		REGISTER_URL = registerUrl;
 		FINALISE_REGISTRATION_URL = finaliseRegistrationUrl;
-		restTemplate.setErrorHandler(new ResponseErrorHandler());
+		restTemplate.setErrorHandler(new ServicesResponseErrorHandler());
 	}
 
 

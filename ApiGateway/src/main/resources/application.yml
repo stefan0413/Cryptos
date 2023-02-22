@@ -22,9 +22,9 @@ payments:
     create-payment-intent: ${payments.base}/private/payments/payment-intents/{customerId}/create
     confirm-payment-intent: ${payments.base}/private/payments/payment-intents/{customerId}/confirm
   withdrawal:
-    get-withdrawals-for-customer: ${payments.base}/private/payments/withdrawals/{customerId}
+    get-customer-withdrawals: ${payments.base}/private/payments/withdrawals/{customerId}
     get-pending-withdrawals-for-customer: ${payments.base}/private/payments/withdrawals/{customerId}/pending
     create-withdrawal-request:  ${payments.base}/private/payments/withdrawals/{customerId}/create
-    update-withdrawal-status:  ${payments.base}/private/payments/withdrawals/{customerId}/withdrawal-status/{withdrawalId}
+    update-withdrawal-status:  ${payments.base}/private/payments/withdrawals/{customerId}/withdrawal-statuses/{withdrawalId}
 
 

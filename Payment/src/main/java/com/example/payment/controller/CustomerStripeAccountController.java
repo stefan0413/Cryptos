@@ -1,8 +1,7 @@
 package com.example.payment.controller;
 
-import com.example.payment.model.CustomerPaymentMethod;
-import com.example.payment.model.CustomerPaymentMethodResponseWrapper;
-import com.example.payment.model.CustomerStripeAccount;
+import com.example.payment.model.payment_method.CustomerPaymentMethodResponseWrapper;
+import com.example.payment.model.customer_stripe_account.CustomerStripeAccount;
 import com.example.payment.service.CustomerStripeAccountService;
 import com.example.payment.service.PaymentMethodService;
 import com.stripe.exception.StripeException;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/private/payments/customer-stripe-accounts/{customerId}")

@@ -2,7 +2,7 @@ package com.cryptos.apigateway.rest.payments;
 
 import com.cryptos.apigateway.model.payments.CustomerPaymentMethodResponseWrapper;
 import com.cryptos.apigateway.model.payments.CustomerStripeAccount;
-import com.cryptos.apigateway.rest.ResponseErrorHandler;
+import com.cryptos.apigateway.rest.ServicesResponseErrorHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -30,7 +30,7 @@ public class CustomerStripeAccountRestService
 		CREATE_CUSTOMER_STRIPE_ACCOUNT = createCustomerStripeAccount;
 		ADD_PAYMENT_METHOD_TO_CUSTOMER = addPaymentMethodToCustomer;
 
-		restTemplate.setErrorHandler(new ResponseErrorHandler());
+		restTemplate.setErrorHandler(new ServicesResponseErrorHandler());
 	}
 
 

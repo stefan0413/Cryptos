@@ -1,4 +1,4 @@
-package com.example.payment.model;
+package com.example.payment.model.deposit;
 
 
 public enum DepositStatus

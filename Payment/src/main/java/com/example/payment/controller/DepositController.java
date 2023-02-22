@@ -1,6 +1,7 @@
 package com.example.payment.controller;
 
-import com.example.payment.model.Deposit;
+import com.example.payment.model.deposit.Deposit;
+import com.example.payment.model.deposit.DepositResponseWrapper;
 import com.example.payment.service.DepositService;
 import com.stripe.exception.StripeException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class DepositController
 	}
 
 	@GetMapping
-	public List<Deposit> getAllDepositsForCustomer(@PathVariable long customerId)
+	public DepositResponseWrapper getAllDepositsForCustomer(@PathVariable long customerId)
 	{
 		return depositService.getCustomerDeposits(customerId);
 	}

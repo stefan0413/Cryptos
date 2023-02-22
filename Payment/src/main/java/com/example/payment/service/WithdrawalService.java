@@ -1,9 +1,10 @@
 package com.example.payment.service;
 
-import com.example.payment.model.CustomerStripeAccount;
-import com.example.payment.model.Withdrawal;
-import com.example.payment.model.WithdrawalRequest;
-import com.example.payment.model.WithdrawalStatus;
+import com.example.payment.model.customer_stripe_account.CustomerStripeAccount;
+import com.example.payment.model.withdrawal.Withdrawal;
+import com.example.payment.model.withdrawal.WithdrawalRequest;
+import com.example.payment.model.withdrawal.WithdrawalResponseWrapper;
+import com.example.payment.model.withdrawal.WithdrawalStatus;
 import com.example.payment.repository.WithdrawalRepository;
 import org.springframework.stereotype.Service;
 
@@ -38,14 +39,14 @@ public class WithdrawalService
 		withdrawalRepository.saveWithdrawalRequest(new WithdrawalRequest(customerId, amount, iban, WithdrawalStatus.PENDING, LocalDateTime.now()));
 	}
 
-	public List<Withdrawal> getWithdrawalsForCustomer(long customerId)
+	public WithdrawalResponseWrapper getWithdrawalsForCustomer(long customerId)
 	{
-		return withdrawalRepository.getWithdrawalsForCustomer(customerId);
+		return new WithdrawalResponseWrapper(withdrawalRepository.getWithdrawalsForCustomer(customerId));
 	}
 
-	public List<Withdrawal> getPendingWithdrawalsForCustomer(long customerId)
+	public WithdrawalResponseWrapper getPendingWithdrawalsForCustomer(long customerId)
 	{
-		return withdrawalRepository.getPendingWithdrawalsForCustomer(customerId);
+		return new WithdrawalResponseWrapper(withdrawalRepository.getPendingWithdrawalsForCustomer(customerId));
 	}
 
 	public void updateWithdrawalStatus(long id, WithdrawalStatus status)

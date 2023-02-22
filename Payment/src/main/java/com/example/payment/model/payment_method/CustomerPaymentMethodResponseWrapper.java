@@ -1,4 +1,6 @@
-package com.example.payment.model;
+package com.example.payment.model.payment_method;
+
+import com.example.payment.model.payment_method.CustomerPaymentMethod;
 
 import java.util.List;
 
