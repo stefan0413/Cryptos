@@ -1,6 +1,8 @@
 package com.example.payment.service;
 
+import com.example.payment.exception.PaymentsException;
 import com.example.payment.model.CustomerStripeAccount;
+import com.example.payment.model.Deposit;
 import com.example.payment.model.DepositRequest;
 import com.example.payment.model.DepositStatus;
 import com.example.payment.repository.DepositRepository;
@@ -8,10 +10,12 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -23,11 +27,13 @@ public class DepositService
 
 	private final DepositRepository depositRepository;
 	private final CustomerStripeAccountService customerStripeAccountService;
+	private final CurrencyConversionService currencyConversionService;
 
-	public DepositService(DepositRepository depositRepository, CustomerStripeAccountService customerStripeAccountService)
+	public DepositService(DepositRepository depositRepository, CustomerStripeAccountService customerStripeAccountService, CurrencyConversionService currencyConversionService)
 	{
 		this.depositRepository = depositRepository;
 		this.customerStripeAccountService = customerStripeAccountService;
+		this.currencyConversionService = currencyConversionService;
 	}
 
 	public String createPaymentIntent(long customerId, String paymentMethodId, String currency, BigDecimal amount) throws Exception
@@ -35,7 +41,7 @@ public class DepositService
 		CustomerStripeAccount customer = getFullCustomer(customerId);
 
 		String customerCurrencyCode = customer.currency().toUpperCase();
-		BigDecimal amountInCustomerCurrency = CurrencyConversionService.convertAmountFromToCurrency(amount, currency, customerCurrencyCode);
+		BigDecimal amountInCustomerCurrency = currencyConversionService.convertAmountFromToCurrency(amount, currency, customerCurrencyCode);
 		if (paymentMethodId == null)
 		{
 			paymentMethodId = getDefaultPaymentMethod(customerId);
@@ -53,22 +59,34 @@ public class DepositService
 		return paymentIntentId;
 	}
 
-	public void confirmPaymentIntent(long customerId, String paymentIntentId) throws Exception
+	public List<Deposit> getCustomerDeposits(long customerId)
 	{
-		PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId).confirm();
+		return depositRepository.getAllDepositsForCustomer(customerId);
+	}
 
+	public void confirmPaymentIntent(long customerId, String paymentIntentId) throws StripeException
+	{
+		PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
+
+		paymentIntent.confirm();
+		updateCustomerAndDepositData(customerId, paymentIntent);
+	}
+
+	private void updateCustomerAndDepositData(long customerId, PaymentIntent paymentIntent) throws StripeException
+	{
 		if (paymentIntent.getStatus().equals(SUCCEEDED))
 		{
-			depositRepository.updateStatus(paymentIntentId, DepositStatus.EXECUTED.name());
+			depositRepository.updateStatus(paymentIntent.getId(), DepositStatus.EXECUTED.name());
+			depositRepository.updateExecutionTimestamp(paymentIntent.getId(), LocalDateTime.now());
 
-			BigDecimal convertedAmountToSystemCurrency = CurrencyConversionService.convertAmountFromToCurrency(convertStripeAmountToAmount(paymentIntent.getAmount()),
+			BigDecimal convertedAmountToSystemCurrency = currencyConversionService.convertAmountFromToCurrency(convertStripeAmountToAmount(paymentIntent.getAmount()),
 																											   paymentIntent.getCurrency().toUpperCase(), SYSTEM_CURRENCY_CODE);
 			updateCustomerBalanceInStripe(customerId, convertedAmountToSystemCurrency);
 			updateCustomerBalance(getFullCustomer(customerId), convertedAmountToSystemCurrency);
 		}
 		else
 		{
-			depositRepository.updateStatus(paymentIntentId, DepositStatus.FAILED_EXECUTION.name());
+			depositRepository.updateStatus(paymentIntent.getId(), DepositStatus.FAILED_EXECUTION.name());
 		}
 	}
 

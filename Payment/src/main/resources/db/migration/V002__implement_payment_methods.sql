@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `customer_payment_method`
 (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
     `customer_id` BIGINT NOT NULL,
-    `payment_method_token` VARCHAR(64) UNIQUE,
+    `payment_method_token` VARCHAR(32) UNIQUE,
     `stripe_payment_method_id` VARCHAR(32) UNIQUE,
 
     INDEX `customer_stripe_account_id_idx` (`id`),

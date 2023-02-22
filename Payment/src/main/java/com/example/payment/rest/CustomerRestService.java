@@ -16,6 +16,7 @@ public class CustomerRestService
 	public CustomerRestService(@Value("${customers.get-customer-by-id-url}") String GET_CUSTOMER_BY_ID_URL)
 	{
 		this.GET_CUSTOMER_BY_ID_URL = GET_CUSTOMER_BY_ID_URL;
+		restTemplate.setErrorHandler(new CustomerResponseErrorHandler());
 	}
 
 	public CustomerDataResponse getCustomerDataById(long customerId)

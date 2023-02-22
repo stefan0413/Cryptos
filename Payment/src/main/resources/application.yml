@@ -16,3 +16,5 @@ stripe:
 
 customers:
   get-customer-by-id-url: http://localhost:9090/private/customers/data/{customerId}
+currency-conversion:
+  exchange-rates-url: https://v6.exchangerate-api.com/v6/6385298c43a888c7956e7680/latest/{fromCurrency}

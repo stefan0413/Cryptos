@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Service
-public class DepositRowmapper implements RowMapper<Deposit>
+public class DepositRowMapper implements RowMapper<Deposit>
 {
 
 	@Override public Deposit mapRow(ResultSet rs, int rowNum) throws SQLException
@@ -25,6 +25,7 @@ public class DepositRowmapper implements RowMapper<Deposit>
 						   DepositStatus.valueOf(rs.getString("status")),
 						   LocalDateTime.ofInstant(rs.getTimestamp("created_at").toInstant(),
 												   ZoneId.systemDefault()),
+						   rs.getTimestamp("executed_at") == null ? null :
 						   LocalDateTime.ofInstant(rs.getTimestamp("executed_at").toInstant(),
 												   ZoneId.systemDefault()));
 	}
