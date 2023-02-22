@@ -1,6 +1,6 @@
 package com.example.payment.repository.row_mappers;
 
-import com.example.payment.model.CustomerPaymentMethod;
+import com.example.payment.model.payment_method.CustomerPaymentMethod;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 

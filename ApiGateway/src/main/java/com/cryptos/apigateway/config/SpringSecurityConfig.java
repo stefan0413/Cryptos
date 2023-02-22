@@ -1,7 +1,7 @@
 package com.cryptos.apigateway.config;
 
 import com.cryptos.apigateway.jwt.JWTAuthenticationFilter;
-import com.cryptos.apigateway.service.CustomerAuthenticationService;
+import com.cryptos.apigateway.service.customers.CustomerAuthenticationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

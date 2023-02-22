@@ -1,6 +1,6 @@
 package com.example.payment.repository;
 
-import com.example.payment.model.CustomerPaymentMethod;
+import com.example.payment.model.payment_method.CustomerPaymentMethod;
 import com.example.payment.repository.row_mappers.PaymentMethodRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,6 @@
 package com.example.payment.service;
 
-import com.example.payment.model.CustomerPaymentMethod;
+import com.example.payment.model.payment_method.CustomerPaymentMethodResponseWrapper;
 import com.example.payment.repository.PaymentMethodRepository;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
@@ -44,8 +44,8 @@ public class PaymentMethodService
 		return customer.getSources().create(params);
 	}
 
-	public List<CustomerPaymentMethod> getPaymentMethodsForCustomer(long customerId)
+	public CustomerPaymentMethodResponseWrapper getPaymentMethodsForCustomer(long customerId)
 	{
-		return paymentMethodRepository.getPaymentMethodsForCustomer(customerId);
+		return new CustomerPaymentMethodResponseWrapper(paymentMethodRepository.getPaymentMethodsForCustomer(customerId));
 	}
 }

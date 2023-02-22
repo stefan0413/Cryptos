@@ -1,7 +1,7 @@
 package com.example.payment.repository.row_mappers;
 
-import com.example.payment.model.Deposit;
-import com.example.payment.model.DepositStatus;
+import com.example.payment.model.deposit.Deposit;
+import com.example.payment.model.deposit.DepositStatus;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 

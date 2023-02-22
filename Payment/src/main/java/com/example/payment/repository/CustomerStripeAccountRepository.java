@@ -1,8 +1,8 @@
 package com.example.payment.repository;
 
 import com.example.payment.exception.PaymentsException;
-import com.example.payment.model.CustomerStripeAccount;
-import com.example.payment.model.CustomerStripeAccountRequest;
+import com.example.payment.model.customer_stripe_account.CustomerStripeAccount;
+import com.example.payment.model.customer_stripe_account.CustomerStripeAccountRequest;
 import com.example.payment.repository.row_mappers.CustomerStripeAccountRowMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

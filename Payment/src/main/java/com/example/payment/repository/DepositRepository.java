@@ -1,7 +1,7 @@
 package com.example.payment.repository;
 
-import com.example.payment.model.Deposit;
-import com.example.payment.model.DepositRequest;
+import com.example.payment.model.deposit.Deposit;
+import com.example.payment.model.deposit.DepositRequest;
 import com.example.payment.repository.row_mappers.DepositRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
