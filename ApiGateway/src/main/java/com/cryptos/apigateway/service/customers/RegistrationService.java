@@ -1,10 +1,10 @@
-package com.cryptos.apigateway.service;
+package com.cryptos.apigateway.service.customers;
 
 import com.cryptos.apigateway.jwt.JwtUtils;
-import com.cryptos.apigateway.model.Customer;
-import com.cryptos.apigateway.model.requests.FinaliseRegistrationRequest;
-import com.cryptos.apigateway.model.requests.RegistrationRequest;
-import com.cryptos.apigateway.rest.CustomerRestService;
+import com.cryptos.apigateway.model.customers.Customer;
+import com.cryptos.apigateway.model.customers.FinaliseRegistrationRequest;
+import com.cryptos.apigateway.model.customers.RegistrationRequest;
+import com.cryptos.apigateway.rest.customers.CustomerRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCrypt;

@@ -1,10 +1,9 @@
-package com.cryptos.apigateway.rest;
+package com.cryptos.apigateway.rest.customers;
 
-import com.cryptos.apigateway.model.Customer;
-import com.cryptos.apigateway.model.requests.FinaliseRegistrationRequest;
-import com.cryptos.apigateway.model.requests.RegistrationRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.cryptos.apigateway.model.customers.Customer;
+import com.cryptos.apigateway.model.customers.FinaliseRegistrationRequest;
+import com.cryptos.apigateway.model.customers.RegistrationRequest;
+import com.cryptos.apigateway.rest.ResponseErrorHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,7 +24,7 @@ public class CustomerRestService
 		GET_CUSTOMER_BY_EMAIL_URL = getCustomerByEmail;
 		REGISTER_URL = registerUrl;
 		FINALISE_REGISTRATION_URL = finaliseRegistrationUrl;
-		restTemplate.setErrorHandler(new CustomerResponseErrorHandler());
+		restTemplate.setErrorHandler(new ResponseErrorHandler());
 	}
 
 

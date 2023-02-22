@@ -1,4 +1,4 @@
-package com.cryptos.apigateway.model.requests;
+package com.cryptos.apigateway.model.customers;
 
 public record FinaliseRegistrationRequest(String firstName,
 										  String secondName,

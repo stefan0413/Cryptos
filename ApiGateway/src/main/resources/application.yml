@@ -6,6 +6,25 @@ spring:
       host: localhost
       port: 6379
 customers:
-  get-by-email-url: http://localhost:9090/private/customers/search?email={email}
-  register-url: http://localhost:9090/private/customers/authentication/register
-  finalise-registration-url: http://localhost:9090/private/customers/authentication/{customerId}/finalise-registration
+  base: http://localhost:9090
+  get-by-email-url: ${customers.base}/private/customers/search?email={email}
+  register-url:  ${customers.base}/private/customers/authentication/register
+  finalise-registration-url:  ${customers.base}/private/customers/authentication/{customerId}/finalise-registration
+payments:
+  base: http://localhost:8081
+  customer:
+    get-full-customer: ${payments.base}/private/payments/customer-stripe-accounts/{customerId}
+    get-customer-payment-methods: ${payments.base}/private/payments/customer-stripe-accounts/{customerId}/payment-methods
+    create-customer-stripe-account:  ${payments.base}/private/payments/customer-stripe-accounts/{customerId}/create
+    add-payment-method-to-customer: ${payments.base}/private/payments/customer-stripe-accounts/{customerId}/payment-methods/add
+  deposit:
+    get-deposits-for-customer: ${payments.base}/private/payments/payment-intents/{customerId}
+    create-payment-intent: ${payments.base}/private/payments/payment-intents/{customerId}/create
+    confirm-payment-intent: ${payments.base}/private/payments/payment-intents/{customerId}/confirm
+  withdrawal:
+    get-withdrawals-for-customer: ${payments.base}/private/payments/withdrawals/{customerId}
+    get-pending-withdrawals-for-customer: ${payments.base}/private/payments/withdrawals/{customerId}/pending
+    create-withdrawal-request:  ${payments.base}/private/payments/withdrawals/{customerId}/create
+    update-withdrawal-status:  ${payments.base}/private/payments/withdrawals/{customerId}/withdrawal-status/{withdrawalId}
+
+

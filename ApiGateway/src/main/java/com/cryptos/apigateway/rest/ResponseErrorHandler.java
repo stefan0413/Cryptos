@@ -2,14 +2,13 @@ package com.cryptos.apigateway.rest;
 
 import com.cryptos.apigateway.exceptions.CustomerException;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.ResponseErrorHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
-public class CustomerResponseErrorHandler implements ResponseErrorHandler
+public class ResponseErrorHandler implements org.springframework.web.client.ResponseErrorHandler
 {
 
 	@Override

@@ -1,7 +1,7 @@
-package com.cryptos.apigateway.service;
+package com.cryptos.apigateway.service.customers;
 
 import com.cryptos.apigateway.jwt.JwtUtils;
-import com.cryptos.apigateway.model.requests.AuthenticationRequest;
+import com.cryptos.apigateway.model.customers.AuthenticationRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;

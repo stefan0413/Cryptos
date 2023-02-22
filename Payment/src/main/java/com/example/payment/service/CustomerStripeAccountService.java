@@ -1,6 +1,5 @@
 package com.example.payment.service;
 
-import com.example.payment.exception.PaymentsException;
 import com.example.payment.model.CustomerDataResponse;
 import com.example.payment.model.CustomerPaymentMethod;
 import com.example.payment.model.CustomerStripeAccount;
@@ -9,7 +8,6 @@ import com.example.payment.repository.CustomerStripeAccountRepository;
 import com.example.payment.rest.CustomerRestService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -45,7 +43,7 @@ public class CustomerStripeAccountService
 		CustomerStripeAccount customerStripeAccount =
 				customerStripeAccountRepository.getCustomerStripeAccountByCustomerId(customerId);
 
-		List<CustomerPaymentMethod> paymentMethods = paymentMethodService.getPaymentMethodsForCustomer(customerId);
+		List<CustomerPaymentMethod> paymentMethods = paymentMethodService.getPaymentMethodsForCustomer(customerId).customerPaymentMethods();
 
 
 		return buildFullCustomerStripeAccount(customerStripeAccount, paymentMethods);

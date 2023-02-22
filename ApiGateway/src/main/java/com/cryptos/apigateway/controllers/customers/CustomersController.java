@@ -1,11 +1,11 @@
-package com.cryptos.apigateway.controllers;
+package com.cryptos.apigateway.controllers.customers;
 
 import com.cryptos.apigateway.jwt.JwtBlacklistService;
-import com.cryptos.apigateway.model.requests.AuthenticationRequest;
-import com.cryptos.apigateway.model.requests.FinaliseRegistrationRequest;
-import com.cryptos.apigateway.model.requests.RegistrationRequest;
-import com.cryptos.apigateway.service.AuthenticationService;
-import com.cryptos.apigateway.service.RegistrationService;
+import com.cryptos.apigateway.model.customers.AuthenticationRequest;
+import com.cryptos.apigateway.model.customers.FinaliseRegistrationRequest;
+import com.cryptos.apigateway.model.customers.RegistrationRequest;
+import com.cryptos.apigateway.service.customers.AuthenticationService;
+import com.cryptos.apigateway.service.customers.RegistrationService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,11 +56,4 @@ public class CustomersController
 	{
 		jwtBlacklistService.addTokenToBlacklist(jwtToken.substring(7));
 	}
-
-	@GetMapping("/test")
-	public String testEndpoint()
-	{
-		return "hello";
-	}
-
 }

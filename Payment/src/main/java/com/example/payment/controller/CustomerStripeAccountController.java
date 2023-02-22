@@ -1,6 +1,7 @@
 package com.example.payment.controller;
 
 import com.example.payment.model.CustomerPaymentMethod;
+import com.example.payment.model.CustomerPaymentMethodResponseWrapper;
 import com.example.payment.model.CustomerStripeAccount;
 import com.example.payment.service.CustomerStripeAccountService;
 import com.example.payment.service.PaymentMethodService;
@@ -13,17 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/private/payments/customer-stripe-accounts/{customerId}")
-public class PaymentCustomerController
+public class CustomerStripeAccountController
 {
 
 	private final CustomerStripeAccountService customerStripeAccountService;
 	private final PaymentMethodService paymentMethodService;
 
-	public PaymentCustomerController(CustomerStripeAccountService customerStripeAccountService, PaymentMethodService paymentMethodService)
+	public CustomerStripeAccountController(CustomerStripeAccountService customerStripeAccountService, PaymentMethodService paymentMethodService)
 	{
 		this.customerStripeAccountService = customerStripeAccountService;
 		this.paymentMethodService = paymentMethodService;
@@ -35,9 +35,15 @@ public class PaymentCustomerController
 		return customerStripeAccountService.getFullCustomer(customerId);
 	}
 
+	@GetMapping("/payment-methods")
+	public CustomerPaymentMethodResponseWrapper retrieveCustomerPaymentMethods(@PathVariable long customerId) throws StripeException
+	{
+		return paymentMethodService.getPaymentMethodsForCustomer(customerId);
+	}
+
 	@PostMapping("/create")
-	public void createPaymentCustomer(@PathVariable Long customerId,
-									  @RequestParam String currencyCode) throws StripeException
+	public void createCustomerStripeAccount(@PathVariable Long customerId,
+											@RequestParam String currencyCode) throws StripeException
 	{
 		customerStripeAccountService.createCustomer(customerId, currencyCode);
 	}
@@ -47,11 +53,5 @@ public class PaymentCustomerController
 										   @RequestParam String paymentMethodToken) throws StripeException
 	{
 		paymentMethodService.addPaymentMethodToCustomer(customerId, paymentMethodToken);
-	}
-
-	@GetMapping("/payment-methods")
-	public List<CustomerPaymentMethod> retrieveCustomerPaymentMethods(@PathVariable long customerId) throws StripeException
-	{
-		return paymentMethodService.getPaymentMethodsForCustomer(customerId);
 	}
 }
