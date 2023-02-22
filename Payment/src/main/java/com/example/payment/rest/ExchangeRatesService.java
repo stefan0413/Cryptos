@@ -1,5 +1,6 @@
 package com.example.payment.rest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,17 +11,22 @@ import java.util.Map;
 public class ExchangeRatesService
 {
 
-	private static final String url = "https://v6.exchangerate-api.com/v6/6385298c43a888c7956e7680/latest/{fromCurrency}";
+	private final String EXCHANGE_RATES_URL;
+	private final RestTemplate restTemplate = new RestTemplate();
 
-	private static final RestTemplate restTemplate = new RestTemplate();
+	public ExchangeRatesService(@Value("${currency-conversion.exchange-rates-url}") String exchangeRatesUrl)
+	{
+		EXCHANGE_RATES_URL = exchangeRatesUrl;
+		restTemplate.setErrorHandler(new CurrencyConversionExceptionHandling());
+	}
 
 	public record ConversionRates(Map<String, BigDecimal> conversion_rates)
 	{
 
 	}
 
-	public static ConversionRates getExchangeRates(String fromCurrency)
+	public ConversionRates getExchangeRates(String fromCurrency)
 	{
-		return restTemplate.getForObject(url, ConversionRates.class, fromCurrency);
+		return restTemplate.getForObject(EXCHANGE_RATES_URL, ConversionRates.class, fromCurrency);
 	}
 }

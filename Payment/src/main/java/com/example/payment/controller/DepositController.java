@@ -1,6 +1,9 @@
 package com.example.payment.controller;
 
+import com.example.payment.model.Deposit;
 import com.example.payment.service.DepositService;
+import com.stripe.exception.StripeException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @RestController
@@ -16,9 +20,16 @@ public class DepositController
 {
 
 	private final DepositService depositService;
+
 	public DepositController(DepositService depositService)
 	{
 		this.depositService = depositService;
+	}
+
+	@GetMapping
+	public List<Deposit> getAllDepositsForCustomer(@PathVariable long customerId)
+	{
+		return depositService.getCustomerDeposits(customerId);
 	}
 
 	@PostMapping("/create")
@@ -32,7 +43,7 @@ public class DepositController
 
 	@PostMapping("/confirm")
 	public void confirmPaymentIntent(@PathVariable long customerId,
-									   @RequestParam String paymentIntentId) throws Exception
+									 @RequestParam String paymentIntentId) throws StripeException
 	{
 		depositService.confirmPaymentIntent(customerId, paymentIntentId);
 	}

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `deposit`
     `customer_id` BIGINT NOT NULL,
     `stripe_payment_method_id` VARCHAR(32) NOT NULL,
     `stripe_payment_intent_id` VARCHAR(32) NOT NULL,
-    `amount` VARCHAR(32) NOT NULL,
+    `amount` DECIMAL(19,4) NOT NULL,
     `currency_code` VARCHAR(3) NOT NULL,
     `status_id`  INT NOT NULL,
     `created_at` DATETIME NOT NULL ,

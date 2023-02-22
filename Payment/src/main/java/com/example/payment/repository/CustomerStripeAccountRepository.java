@@ -1,8 +1,10 @@
 package com.example.payment.repository;
 
+import com.example.payment.exception.PaymentsException;
 import com.example.payment.model.CustomerStripeAccount;
 import com.example.payment.model.CustomerStripeAccountRequest;
 import com.example.payment.repository.row_mappers.CustomerStripeAccountRowMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -58,6 +60,13 @@ public class CustomerStripeAccountRepository
 	public CustomerStripeAccount getCustomerStripeAccountByCustomerId(long customerId)
 	{
 		String sql = BASE_SELECT_QUERY + "WHERE customer_id=:customer_id";
-		return namedParameterJdbcTemplate.queryForObject(sql, Map.of("customer_id", customerId), customerStripeAccountRowMapper);
+		try
+		{
+			return namedParameterJdbcTemplate.queryForObject(sql, Map.of("customer_id", customerId), customerStripeAccountRowMapper);
+		}
+		catch (EmptyResultDataAccessException ex)
+		{
+			throw new PaymentsException("NoSuchCustomerStripeAccount", String.format("No such customerStripeAccount, customeId: %d", customerId));
+		}
 	}
 }
