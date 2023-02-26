@@ -6,8 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Customers" />
         <module name="Payment" />
+        <module name="Customers" />
+        <module name="demo" />
         <module name="ApiGateway" />
       </profile>
     </annotationProcessing>
@@ -22,6 +23,7 @@
       <module name="ApiGateway" options="-parameters" />
       <module name="Customers" options="-parameters" />
       <module name="Payment" options="-parameters" />
+      <module name="demo" options="-parameters" />
       <module name="fdfd" options="-parameters" />
       <module name="fdfd (1) (com.cryptos)" options="-parameters" />
       <module name="test" options="-parameters" />
