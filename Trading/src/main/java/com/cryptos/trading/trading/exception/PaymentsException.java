@@ -1,4 +1,4 @@
-package com.cryptos.apigateway.exceptions;
+package com.cryptos.trading.trading.exception;
 
 public class PaymentsException extends RuntimeException
 {

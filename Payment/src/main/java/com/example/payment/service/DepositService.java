@@ -10,6 +10,8 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,6 +26,7 @@ public class DepositService
 	private static final String SYSTEM_CURRENCY_CODE = "BGN";
 	private static final String SUCCEEDED = "succeeded";
 
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final DepositRepository depositRepository;
 	private final CustomerStripeAccountService customerStripeAccountService;
 	private final CurrencyConversionService currencyConversionService;
@@ -67,6 +70,10 @@ public class DepositService
 	{
 		PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
 
+		if(!paymentIntent.getCustomer().equals(String.valueOf(customerId))){
+			throw new IllegalArgumentException("Payment intent does not belong to customer");
+		}
+
 		updateCustomerAndDepositData(customerId, paymentIntent.confirm());
 	}
 
@@ -81,7 +88,7 @@ public class DepositService
 			BigDecimal convertedAmountToSystemCurrency = currencyConversionService.convertAmountFromToCurrency(convertStripeAmountToAmount(paymentIntent.getAmount()),
 																											   paymentIntent.getCurrency().toUpperCase(), SYSTEM_CURRENCY_CODE);
 			updateCustomerBalanceInStripe(customerId, convertedAmountToSystemCurrency);
-			updateCustomerBalance(getFullCustomer(customerId), convertedAmountToSystemCurrency);
+			updateCustomerBalance(getFullCustomer(customerId), convertStripeAmountToAmount(paymentIntent.getAmount()));
 		}
 		else
 		{
@@ -111,7 +118,7 @@ public class DepositService
 
 	private void updateCustomerBalance(CustomerStripeAccount customer, BigDecimal amount)
 	{
-		customerStripeAccountService.updateCustomerBalance(customer.customerId(), customer.freeBalance().add(amount), customer.investedBalance());
+		customerStripeAccountService.updateCustomerBalance(customer.customerId(), customer.freeBalance().add(amount));
 	}
 
 	private void updateCustomerBalanceInStripe(long customerId, BigDecimal amount) throws StripeException

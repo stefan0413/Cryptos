@@ -1,7 +1,7 @@
 package com.example.payment.service;
 
 import com.example.payment.exception.PaymentsException;
-import com.example.payment.rest.ExchangeRatesService;
+import com.example.payment.rest.ExchangeRatesRestService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,11 +11,11 @@ import java.util.Map;
 public class CurrencyConversionService
 {
 
-	private final ExchangeRatesService exchangeRatesService;
+	private final ExchangeRatesRestService exchangeRatesRestService;
 
-	public CurrencyConversionService(ExchangeRatesService exchangeRatesService)
+	public CurrencyConversionService(ExchangeRatesRestService exchangeRatesRestService)
 	{
-		this.exchangeRatesService = exchangeRatesService;
+		this.exchangeRatesRestService = exchangeRatesRestService;
 	}
 
 	public BigDecimal convertAmountFromToCurrency(BigDecimal amount, String from, String to)
@@ -28,7 +28,7 @@ public class CurrencyConversionService
 		try
 		{
 
-			Map<String, BigDecimal> exchangeRates = exchangeRatesService.getExchangeRates(from).conversion_rates();
+			Map<String, BigDecimal> exchangeRates = exchangeRatesRestService.getExchangeRates(from).conversion_rates();
 			return amount.multiply(exchangeRates.get(to));
 		}
 		catch (Exception ex)

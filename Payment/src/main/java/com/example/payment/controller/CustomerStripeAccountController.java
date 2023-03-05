@@ -1,5 +1,6 @@
 package com.example.payment.controller;
 
+import com.example.payment.model.customer_stripe_account.CustomerWithFreeBalanceAndCurrencyResponse;
 import com.example.payment.model.payment_method.CustomerPaymentMethodResponseWrapper;
 import com.example.payment.model.customer_stripe_account.CustomerStripeAccount;
 import com.example.payment.service.CustomerStripeAccountService;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/private/payments/customer-stripe-accounts/{customerId}")
@@ -33,7 +36,7 @@ public class CustomerStripeAccountController
 	}
 
 	@GetMapping("/payment-methods")
-	public CustomerPaymentMethodResponseWrapper retrieveCustomerPaymentMethods(@PathVariable long customerId) throws StripeException
+	public CustomerPaymentMethodResponseWrapper retrieveCustomerPaymentMethods(@PathVariable long customerId)
 	{
 		return paymentMethodService.getPaymentMethodsForCustomer(customerId);
 	}
@@ -50,5 +53,18 @@ public class CustomerStripeAccountController
 										   @RequestParam String paymentMethodToken) throws StripeException
 	{
 		paymentMethodService.addPaymentMethodToCustomer(customerId, paymentMethodToken);
+	}
+
+	@GetMapping("/free-balance-and-currency")
+	public CustomerWithFreeBalanceAndCurrencyResponse getCustomerFreeBalanceAndCurrency(@PathVariable long customerId)
+	{
+		return customerStripeAccountService.getCustomerFreeBalance(customerId);
+	}
+
+	@PostMapping("/modify-free-balance")
+	public void modifyFreeFunds(@PathVariable long customerId,
+								@RequestParam BigDecimal fundsForInvestment)
+	{
+		customerStripeAccountService.updateCustomerBalance(customerId, fundsForInvestment);
 	}
 }

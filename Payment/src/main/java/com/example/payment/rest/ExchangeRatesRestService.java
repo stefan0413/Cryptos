@@ -8,13 +8,13 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 @Service
-public class ExchangeRatesService
+public class ExchangeRatesRestService
 {
 
 	private final String EXCHANGE_RATES_URL;
 	private final RestTemplate restTemplate = new RestTemplate();
 
-	public ExchangeRatesService(@Value("${currency-conversion.exchange-rates-url}") String exchangeRatesUrl)
+	public ExchangeRatesRestService(@Value("${currency-conversion.exchange-rates-url}") String exchangeRatesUrl)
 	{
 		EXCHANGE_RATES_URL = exchangeRatesUrl;
 		restTemplate.setErrorHandler(new CurrencyConversionExceptionHandling());
