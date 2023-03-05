@@ -1,5 +1,6 @@
 package com.cryptos.trading.trading.service;
 
+import com.cryptos.trading.trading.exception.FailedToStoreOrderException;
 import com.cryptos.trading.trading.exception.PaymentsException;
 import com.cryptos.trading.trading.model.CustomerTradingAccount;
 import com.cryptos.trading.trading.model.OrderRequest;
@@ -41,23 +42,30 @@ public class OrderService
 
 	public void makeOrder(long customerId, OrderRequest orderRequest)
 	{
+		long orderId = 0;
 
-		BigDecimal currentPrice = currencyCurrentPrice(orderRequest.supportedCurrency());
-		BigDecimal totalOrderCost = calculateTotalCost(orderRequest.orderSize(), currentPrice);
-
-		long orderId = saveOrder(customerId, orderRequest, currentPrice, totalOrderCost);
-		logger.info(String.format("Order successfully stored: orderId {%d}", orderId));
 		try
 		{
+			BigDecimal currentPrice = currencyCurrentPrice(orderRequest.supportedCurrency());
+			BigDecimal totalOrderCost = calculateTotalCost(orderRequest.orderSize(), currentPrice);
+
+			orderId = saveOrder(customerId, orderRequest, currentPrice, totalOrderCost);
+
+			logger.info(String.format("Order successfully stored: orderId {%d}", orderId));
 			executeOrder(orderId, customerId, orderRequest, totalOrderCost);
-		}catch (Exception ex)
+
+			logger.info(String.format("Order successfully executed: orderId {%d}", orderId));
+			orderRepository.updateStatus(orderId, OrderStatus.EXECUTED.name());
+		}
+		catch (FailedToStoreOrderException ex)
+		{
+			logger.error("Error while storing order", ex);
+		}
+		catch (RuntimeException ex)
 		{
 			logger.error("Error while executing order: " + orderId, ex);
 			orderRepository.updateStatus(orderId, OrderStatus.FAILED_EXECUTION.name());
-			return;
 		}
-		logger.info(String.format("Order successfully executed: orderId {%d}", orderId));
-		orderRepository.updateStatus(orderId, OrderStatus.EXECUTED.name());
 	}
 
 	private void executeOrder(long orderId, long customerId, OrderRequest orderRequest, BigDecimal totalOrderCost)
@@ -150,7 +158,15 @@ public class OrderService
 																 OrderStatus.PENDING,
 																 totalOrderCost,
 																 LocalDateTime.now());
-		return orderRepository.save(orderSaveRequest);
+		try{
+			return orderRepository.save(orderSaveRequest);
+		}
+		catch (RuntimeException ex)
+		{
+			logger.error("Error while saving order: " + orderSaveRequest, ex);
+			throw new FailedToStoreOrderException("Failed to store order: " + orderSaveRequest);
+		}
+
 	}
 
 	//should implement the flow of getting currentPrice for currency from marketDataService

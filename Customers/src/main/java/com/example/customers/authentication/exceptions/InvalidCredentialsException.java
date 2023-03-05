@@ -1,10 +1,11 @@
 package com.example.customers.authentication.exceptions;
 
-public class InvalidCredentialsException extends IllegalArgumentException
+public class InvalidCredentialsException extends CustomerServiceException
 {
 
 	public InvalidCredentialsException(String message)
+
 	{
-		super(message);
+		super("InvalidCredentialsException",message);
 	}
 }

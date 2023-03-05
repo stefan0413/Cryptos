@@ -57,6 +57,7 @@ public class OrderRepository
 				.addValue("created_at", orderSaveRequest.createdAt());
 
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+
 		namedParameterJdbcTemplate.update(sql, params, keyHolder);
 
 		return keyHolder.getKey().longValue();

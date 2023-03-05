@@ -1,11 +1,11 @@
 package com.example.customers.authentication.exceptions;
 
-public class NoSuchCustomerException extends RuntimeException
+public class NoSuchCustomerException extends CustomerServiceException
 {
 
 	public NoSuchCustomerException(String message)
 	{
-		super(message);
+		super("NoSuchCustomerException", message);
 	}
 
 }

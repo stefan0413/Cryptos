@@ -1,9 +1,9 @@
 package com.cryptos.apigateway.exceptions;
 
-public class CustomerException extends RuntimeException
+public class ServiceException extends RuntimeException
 {
 	private final String type;
-	public CustomerException(String type, String message)
+	public ServiceException(String type, String message)
 	{
 		super(message);
 		this.type = type;

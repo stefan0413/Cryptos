@@ -22,6 +22,7 @@ public class CurrencyConversionExceptionHandling implements ResponseErrorHandler
 	{
 		String responseBody = new BufferedReader(new InputStreamReader(response.getBody()))
 				.lines().collect(Collectors.joining("\n"));
-		throw new CurrencyConversionException("Failed to connect to exchange rates third party!", responseBody);
+
+		throw new CurrencyConversionException(responseBody);
 	}
 }
