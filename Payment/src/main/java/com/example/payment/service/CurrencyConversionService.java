@@ -1,5 +1,6 @@
 package com.example.payment.service;
 
+import com.example.payment.exception.CurrencyConversionException;
 import com.example.payment.exception.PaymentsException;
 import com.example.payment.rest.ExchangeRatesRestService;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class CurrencyConversionService
 		}
 		catch (Exception ex)
 		{
-			throw new PaymentsException("CurrencyConversion exception", ex.getMessage());
+			throw new CurrencyConversionException(ex.getMessage());
 		}
 	}
 }

@@ -1,16 +1,9 @@
 package com.cryptos.trading.trading.exception;
 
-public class CurrencyConversionException extends RuntimeException
+public class CurrencyConversionException extends TradingException
 {
-	private final String type;
-	public CurrencyConversionException(String type, String message)
+	public CurrencyConversionException(String message)
 	{
-		super(message);
-		this.type = type;
-	}
-
-	public String getType()
-	{
-		return type;
+		super("CurrencyConversionException", message);
 	}
 }

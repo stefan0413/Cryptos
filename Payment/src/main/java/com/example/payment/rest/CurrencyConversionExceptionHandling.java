@@ -1,5 +1,6 @@
 package com.example.payment.rest;
 
+import com.example.payment.exception.CurrencyConversionException;
 import com.example.payment.exception.PaymentsException;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
@@ -22,6 +23,6 @@ public class CurrencyConversionExceptionHandling implements ResponseErrorHandler
 	{
 		String responseBody = new BufferedReader(new InputStreamReader(response.getBody()))
 				.lines().collect(Collectors.joining("\n"));
-		throw new PaymentsException("Failed to connect to exchange rates third party!", responseBody);
+		throw new CurrencyConversionException(responseBody);
 	}
 }

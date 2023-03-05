@@ -1,5 +1,6 @@
 package com.cryptos.trading.trading.service;
 
+import com.cryptos.trading.trading.exception.CurrencyConversionException;
 import com.cryptos.trading.trading.exception.PaymentsException;
 import com.cryptos.trading.trading.rest.ExchangeRatesRestService;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class CurrencyConversionService
 		}
 		catch (Exception ex)
 		{
-			throw new PaymentsException("CurrencyConversion exception", ex.getMessage());
+			throw new CurrencyConversionException(ex.getMessage());
 		}
 	}
 }

@@ -1,9 +1,10 @@
 package com.cryptos.trading.trading.exception;
 
-public class NotEnoughFundsException extends RuntimeException
+public class NotEnoughFundsException extends TradingException
 {
+
 	public NotEnoughFundsException(String message)
 	{
-		super(message);
+		super("NotEnoughFundsException", message);
 	}
 }

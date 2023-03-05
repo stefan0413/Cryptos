@@ -1,5 +1,6 @@
 package com.example.payment.repository;
 
+import com.example.payment.exception.NoSuchCustomerStripeAccount;
 import com.example.payment.exception.PaymentsException;
 import com.example.payment.model.customer_stripe_account.CustomerStripeAccount;
 import com.example.payment.model.customer_stripe_account.CustomerStripeAccountRequest;
@@ -67,7 +68,7 @@ public class CustomerStripeAccountRepository
 		}
 		catch (EmptyResultDataAccessException ex)
 		{
-			throw new PaymentsException("NoSuchCustomerStripeAccount", String.format("No such customerStripeAccount, customeId: %d", customerId));
+			throw new NoSuchCustomerStripeAccount(String.format("No such customerStripeAccount, customeId: %d", customerId));
 		}
 	}
 
@@ -82,7 +83,7 @@ public class CustomerStripeAccountRepository
 		catch (RuntimeException ex)
 		{
 			System.out.println("Exception: " + String.format("No such customerStripeAccount, customeId: %d", customerId));
-			throw new PaymentsException("NoSuchCustomerStripeAccount", String.format("No such customerStripeAccount, customeId: %d", customerId));
+			throw new NoSuchCustomerStripeAccount(String.format("No such customerStripeAccount, customeId: %d", customerId));
 		}
 	}
 }

@@ -1,10 +1,10 @@
 package com.example.payment.exception;
 
-public class NotEnoughBalanceException extends RuntimeException
+public class NotEnoughBalanceException extends PaymentsException
 {
 
 	public NotEnoughBalanceException(String message)
 	{
-		super(message);
+		super("NotEnoughBalance", message);
 	}
 }
