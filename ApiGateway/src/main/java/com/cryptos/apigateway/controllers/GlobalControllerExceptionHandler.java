@@ -26,4 +26,11 @@ public class GlobalControllerExceptionHandler
 		logger.warn("Service exception - " + e.getType() + " " + e.getMessage());
 		return ResponseEntity.badRequest().header("REASON",e.getType()).body(e.getMessage());
 	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<String> handleIllegalArgimentException(IllegalArgumentException e)
+	{
+		logger.warn("Service exception - " + "IllegalArgumentException " + e.getMessage());
+		return ResponseEntity.badRequest().header("REASON","IllegalArgumentException").body(e.getMessage());
+	}
 }

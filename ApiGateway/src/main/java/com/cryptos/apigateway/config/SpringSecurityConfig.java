@@ -52,7 +52,7 @@ public class SpringSecurityConfig
 	{
 		http.csrf().disable()
 			.authorizeHttpRequests((request) -> request.requestMatchers(
-					new AntPathRequestMatcher("/api/public/**")).permitAll()
+					new AntPathRequestMatcher("/api/v1/public/**")).permitAll()
 					.anyRequest().authenticated())
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
