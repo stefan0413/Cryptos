@@ -34,7 +34,7 @@ public class WithdrawalService
 			throw new RuntimeException("the withdrawal amount is greater than the free funds");
 		}
 
-		customerStripeAccountService.updateCustomerBalance(customerId, customer.freeBalance().subtract(amount), customer.investedBalance());
+		customerStripeAccountService.updateCustomerBalance(customerId, customer.freeBalance().subtract(amount));
 		System.out.println("Amount: " + amount);
 		withdrawalRepository.saveWithdrawalRequest(new WithdrawalRequest(customerId, amount, iban, WithdrawalStatus.PENDING, LocalDateTime.now()));
 	}

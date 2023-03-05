@@ -1,6 +1,7 @@
 package com.example.payment.service;
 
 import com.example.payment.model.CustomerDataResponse;
+import com.example.payment.model.customer_stripe_account.CustomerWithFreeBalanceAndCurrencyResponse;
 import com.example.payment.model.payment_method.CustomerPaymentMethod;
 import com.example.payment.model.customer_stripe_account.CustomerStripeAccount;
 import com.example.payment.model.customer_stripe_account.CustomerStripeAccountRequest;
@@ -49,9 +50,13 @@ public class CustomerStripeAccountService
 		return buildFullCustomerStripeAccount(customerStripeAccount, paymentMethods);
 	}
 
-	public void updateCustomerBalance(long customerId, BigDecimal freeBalance, BigDecimal investedBalance)
+	public void updateCustomerBalance(long customerId, BigDecimal freeBalance)
 	{
-		customerStripeAccountRepository.updateCustomerBalance(customerId, freeBalance, investedBalance);
+		customerStripeAccountRepository.updateCustomerBalance(customerId, freeBalance);
+	}
+	public CustomerWithFreeBalanceAndCurrencyResponse getCustomerFreeBalance(long customerId)
+	{
+		return customerStripeAccountRepository.getCustomerFreeBalance(customerId);
 	}
 
 	private CustomerStripeAccount buildFullCustomerStripeAccount(CustomerStripeAccount customer,
