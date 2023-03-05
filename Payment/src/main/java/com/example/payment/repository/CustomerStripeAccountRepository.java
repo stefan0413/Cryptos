@@ -79,7 +79,7 @@ public class CustomerStripeAccountRepository
 		{
 			return namedParameterJdbcTemplate.queryForObject(sql, Map.of("customer_id", customerId), new CustomerFreeBalanceWithCurrencyRowMapper());
 		}
-		catch (IncorrectResultSetColumnCountException ex)
+		catch (RuntimeException ex)
 		{
 			System.out.println("Exception: " + String.format("No such customerStripeAccount, customeId: %d", customerId));
 			throw new PaymentsException("NoSuchCustomerStripeAccount", String.format("No such customerStripeAccount, customeId: %d", customerId));
