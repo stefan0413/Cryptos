@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Trading" />
         <module name="Payment" />
+        <module name="MarketData" />
         <module name="Customers" />
         <module name="ApiGateway" />
       </profile>
@@ -23,6 +24,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ApiGateway" options="-parameters" />
       <module name="Customers" options="-parameters" />
+      <module name="MarketData" options="-parameters" />
       <module name="Payment" options="-parameters" />
       <module name="Trading" options="-parameters" />
       <module name="fdfd" options="-parameters" />
