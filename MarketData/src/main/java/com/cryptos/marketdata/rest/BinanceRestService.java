@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 @Service
-public class BinanceRestClient
+public class BinanceRestService
 {
 
 	private static final String BINANCE_API_PRICE_URL = "https://api.binance.com/api/v3/ticker/price?symbol=";
@@ -27,7 +27,7 @@ public class BinanceRestClient
 	private HttpResponse executeRequest(String symbol) throws IOException
 	{
 		HttpClient httpClient = HttpClientBuilder.create().build();
-		HttpGet request = new HttpGet(BINANCE_API_PRICE_URL + symbol);
+		HttpGet request = new HttpGet(BINANCE_API_PRICE_URL + symbol + "USDT");
 
 		return httpClient.execute(request);
 

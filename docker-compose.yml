@@ -1,0 +1,62 @@
+version: '3.6'
+
+services:
+#  api-gateway:
+#    build: ./ApiGateway
+#    ports:
+#      - "8080:8083"
+#    depends_on:
+#      - db
+#    networks:
+#      - cryptos
+  customers:
+    build: ./Customers
+    ports:
+      - "9090:8080"
+    depends_on:
+      - db
+    networks:
+      - cryptos
+#  payments:
+#    build: ./Payments
+#    ports:
+#      - "8081:8081"
+#    depends_on:
+#      - db
+#    networks:
+#      - cryptos
+#  trading:
+#    build: ./Trading
+#    ports:
+#      - "8082:8082"
+#    depends_on:
+#      - db
+#    networks:
+#      - cryptos
+#  market-data:
+#    build: ./MarketData
+#    ports:
+#      - "8083:8083"
+#    depends_on:
+#      - db
+#    networks:
+#      - cryptos
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: root
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    networks:
+      - cryptos
+#  redis_db:
+#    image: redis:latest
+#    ports:
+#      - "6379:6379"
+#    networks:
+#      - cryptos
+networks:
+  cryptos:
+    driver: bridge

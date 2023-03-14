@@ -1,1 +1,4 @@
-
+spring:
+  port: 8084
+  application:
+    name: payments

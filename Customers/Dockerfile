@@ -1,10 +1,6 @@
-FROM openjdk:17-jdk-alpine
-
-RUN mkdir /app
-COPY target/Customers-0.0.1.jar /app
-
-WORKDIR /app
-
+FROM maven:3.8.3-openjdk-17
+COPY pom.xml /pom.xml
+COPY src /src
+RUN mvn clean install
 EXPOSE 8080
-
-CMD ["java", "-jar", "my-app.jar"]
+CMD mvn spring-boot:run
