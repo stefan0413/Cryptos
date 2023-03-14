@@ -11,7 +11,7 @@ customers:
   register-url:  ${customers.base}/private/customers/authentication/register
   finalise-registration-url:  ${customers.base}/private/customers/authentication/{customerId}/finalise-registration
 payments:
-  base: http://Payment:8080
+  base: http://Payments:8080
   customer:
     get-full-customer: ${payments.base}/private/payments/customer-stripe-accounts/{customerId}
     get-customer-payment-methods: ${payments.base}/private/payments/customer-stripe-accounts/{customerId}/payment-methods

@@ -12,7 +12,7 @@ spring:
       connection-timeout: 60000
 
 payments:
-  invest-funds-url: http://localhost:8081/private/payments/customer-stripe-accounts/{customerId}/modify-free-balance
-  customer-with-free-balance-and-currency-url: http://localhost:8081/private/payments/customer-stripe-accounts/{customerId}/free-balance-and-currency
+  invest-funds-url: http://Payments:8080/private/payments/customer-stripe-accounts/{customerId}/modify-free-balance
+  customer-with-free-balance-and-currency-url: http://Payments:8080/private/payments/customer-stripe-accounts/{customerId}/free-balance-and-currency
 currency-conversion:
   exchange-rates-url: https://v6.exchangerate-api.com/v6/6385298c43a888c7956e7680/latest/{fromCurrency}

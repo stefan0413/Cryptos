@@ -18,30 +18,32 @@ services:
       - db
     networks:
       - cryptos
-#  payments:
-#    build: ./Payment
-#    ports:
-#      - "8081:8083"
-#    depends_on:
-#      - db
-#    networks:
-#      - cryptos
-#  trading:
-#    build: ./Trading
-#    ports:
-#      - "8082:8084"
-#    depends_on:
-#      - db
-#    networks:
-#      - cryptos
-#  market-data:
-#    build: ./MarketData
-#    ports:
-#      - "8083:8082"
-#    depends_on:
-#      - db
-#    networks:
-#      - cryptos
+  payments:
+    build: ./Payment
+    ports:
+      - "8081:8080"
+    environment:
+      API_KEY: sk_test_51MH0dvCucZ6lucMqNVBvffVtbqwA8kucCFkzmNS421Q7nEGu05Xnn3CM5ChaaDBJO65FhdgQQJnFMmpeNZRXgAV600Ocp05xfs
+    depends_on:
+      - db
+    networks:
+      - cryptos
+  trading:
+    build: ./Trading
+    ports:
+      - "8082:8080"
+    depends_on:
+      - db
+    networks:
+      - cryptos
+  market-data:
+    build: ./MarketData
+    ports:
+      - "8083:8080"
+    depends_on:
+      - db
+    networks:
+      - cryptos
   db:
     image: mariadb:latest
     restart: always
