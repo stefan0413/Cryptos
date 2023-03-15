@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class MarketDataRestService
 {
 
-	private final String MARKET_DATA_URL = "http://MarketData:8080/private/currencies/price";
+	private final String MARKET_DATA_URL = "http://market-data:8080/private/currencies/price";
 	private final RestTemplate restTemplate = new RestTemplate();
 
 	public BigDecimal getPriceForCryptoCurrencyInUSDT(String symbol)
