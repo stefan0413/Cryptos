@@ -28,5 +28,7 @@ payments:
     update-withdrawal-status:  ${payments.base}/private/payments/withdrawals/{customerId}/withdrawal-statuses/{withdrawalId}
 trading:
   make-order-url: http://Trading:8080/private/trading/{customerId}/orders
+market-data:
+  currency-price-url: http://market-data:8080/private/currencies/price
 
 

@@ -34,13 +34,12 @@ public class CustomerStripeAccountRepository
 	public void save(CustomerStripeAccountRequest customerStripeAccountRequest)
 	{
 		String sql = """
-						    INSERT INTO customer_stripe_account (customer_id, currency_code, free_balance, invested_balance, email, names)
-						    VALUES(:customer_id, :currency_code, :free_balance, :invested_balance, :email, :names)
+						    INSERT INTO customer_stripe_account (customer_id, currency_code, free_balance, email, names)
+						    VALUES(:customer_id, :currency_code, :free_balance, :email, :names)
 				""";
 		Map<String, Object> params = Map.of("customer_id", customerStripeAccountRequest.customerId(),
 											"currency_code", customerStripeAccountRequest.currencyCode(),
 											"free_balance", customerStripeAccountRequest.freeBalance(),
-											"invested_balance", customerStripeAccountRequest.investedBalance(),
 											"email", customerStripeAccountRequest.email(),
 											"names", customerStripeAccountRequest.names());
 		namedParameterJdbcTemplate.update(sql, params);

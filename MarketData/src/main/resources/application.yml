@@ -1,3 +1,7 @@
 spring:
   application:
     name: payments
+
+binance:
+  api:
+    price-url: https://api.binance.com/api/v3/ticker/price?symbol=
