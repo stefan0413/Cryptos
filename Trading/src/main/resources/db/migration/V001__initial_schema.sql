@@ -17,8 +17,16 @@ CREATE TABLE IF NOT EXISTS `n_supported_currencies`
 );
 
 INSERT IGNORE INTO `n_supported_currencies` (code)
-VALUES ('CR1'),
-       ('CR7');
+VALUES ('BTC'),
+       ('ETH'),
+       ('BNB'),
+       ('ADA'),
+       ('XRP'),
+       ('DOT'),
+       ('DOGE'),
+       ('UNI'),
+       ('LTC'),
+       ('BCH');
 
 CREATE TABLE IF NOT EXISTS `n_order_type`
 (

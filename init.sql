@@ -1,0 +1,3 @@
+CREATE DATABASE payments;
+CREATE DATABASE customers;
+CREATE DATABASE trading;

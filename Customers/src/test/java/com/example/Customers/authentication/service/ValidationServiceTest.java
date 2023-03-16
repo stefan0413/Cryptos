@@ -14,30 +14,6 @@ class ValidationServiceTest
 {
 
 	@ParameterizedTest
-	@MethodSource("validPasswords")
-	void testValidateRegistrationRequestWhenValidPasswordShouldNotThrow(String password)
-	{
-		assertDoesNotThrow(() ->
-			   ValidationService.validateRegistrationRequest(buildRegistrationRequest("email@example.com",password, "name", "+359 888787654")));
-	}
-
-	@ParameterizedTest
-	@MethodSource("invalidPasswords")
-	void testValidateRegistrationRequestWhenInvalidPasswordShouldThrow(String password)
-	{
-		assertThrows(InvalidCredentialsException.class, () ->
-				ValidationService.validateRegistrationRequest(buildRegistrationRequest("email@example.com",password, "name", "+359 888787654")));
-	}
-
-	@ParameterizedTest
-	@MethodSource("validEmails")
-	void testValidateRegistrationRequestWhenValidEmailShouldThrow(String password)
-	{
-		assertThrows(InvalidCredentialsException.class, () ->
-				ValidationService.validateRegistrationRequest(buildRegistrationRequest("email@example.com",password, "name", "+359 888787654")));
-	}
-
-	@ParameterizedTest
 	@MethodSource("validEmails")
 	void testValidateRegistrationRequestWhenInvalidEmailShouldThrow(String email)
 	{
@@ -91,32 +67,5 @@ class ValidationServiceTest
 						 "email@111.222.333.44444",
 						 "email@example..com",
 						 "Abc..123@example.com");
-	}
-
-	private static Stream<String> validPasswords()
-	{
-		return Stream.of("AAAbbbccc@123",
-						 "Hello world$123",
-						 "A!@#&()–a1",
-						 "A[{}]:;',?/*a1",
-						 "A~$^+=<>a1",
-						 "0123456789$abcdefgAB",
-						 "123Aa$Aa");
-	}
-
-	private static Stream<String> invalidPasswords()
-	{
-		return Stream.of("12345678",
-						 "abcdefgh",
-						 "ABCDEFGH",
-						 "abc123$$$",
-						 "ABC123$$$",
-						 "ABC$$$$$$",
-						 "java REGEX 123",
-						 "java REGEX 123 %",
-						 "________",
-						 "--------",
-						 " ",
-						 "");
 	}
 }

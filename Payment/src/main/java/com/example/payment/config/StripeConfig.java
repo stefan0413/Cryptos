@@ -10,9 +10,9 @@ public class StripeConfig
 {
 	String stripeApiKey;
 
-	public StripeConfig(@Value("${stripe.api-key}") String stripeApiKey)
+	public StripeConfig()
 	{
-		this.stripeApiKey = stripeApiKey;
+		this.stripeApiKey = System.getenv("API_KEY");
 	}
 
 	@PostConstruct

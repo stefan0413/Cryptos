@@ -11,6 +11,7 @@ import com.cryptos.trading.trading.model.SupportedCurrency;
 import com.cryptos.trading.trading.model.payments.CustomerWithFreeBalanceAndCurrencyResponse;
 import com.cryptos.trading.trading.repository.CustomerTradingAccountRepository;
 import com.cryptos.trading.trading.repository.OrderRepository;
+import com.cryptos.trading.trading.rest.MarketDataRestService;
 import com.cryptos.trading.trading.rest.PaymentsRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +31,21 @@ public class OrderService
 	private final CustomerTradingAccountRepository customerTradingAccountRepository;
 	private final PaymentsRestService paymentsRestService;
 	private final OrderValidationService orderValidationService;
+	private final MarketDataRestService marketDataRestService;
 
-	public OrderService(OrderRepository orderRepository, CustomerTradingAccountService customerTradingAccountService, CustomerTradingAccountRepository customerTradingAccountRepository, PaymentsRestService paymentsRestService, OrderValidationService orderValidationService)
+	public OrderService(OrderRepository orderRepository,
+						CustomerTradingAccountService customerTradingAccountService,
+						CustomerTradingAccountRepository customerTradingAccountRepository,
+						PaymentsRestService paymentsRestService,
+						OrderValidationService orderValidationService,
+						MarketDataRestService marketDataRestService)
 	{
 		this.orderRepository = orderRepository;
 		this.customerTradingAccountService = customerTradingAccountService;
 		this.customerTradingAccountRepository = customerTradingAccountRepository;
 		this.paymentsRestService = paymentsRestService;
 		this.orderValidationService = orderValidationService;
+		this.marketDataRestService = marketDataRestService;
 	}
 
 	public void makeOrder(long customerId, OrderRequest orderRequest)
@@ -102,7 +110,8 @@ public class OrderService
 								  CustomerWithFreeBalanceAndCurrencyResponse customerWithFreeBalance)
 	{
 		addSellOrderCostToFreeFunds(orderId, customerId, totalOrderCost);
-		Optional<CustomerTradingAccount> customerTradingAccount = customerTradingAccountRepository.getCustomerTradingAccountsByCustomerIdAndCurrency(customerId, orderRequest.supportedCurrency());
+		Optional<CustomerTradingAccount> customerTradingAccount =
+				customerTradingAccountRepository.getCustomerTradingAccountsByCustomerIdAndCurrency(customerId, orderRequest.supportedCurrency());
 
 		try
 		{
@@ -115,7 +124,8 @@ public class OrderService
 			throw ex;
 		}
 
-		customerTradingAccountService.updateCurrencyAmount(customerId, orderRequest.supportedCurrency(), customerTradingAccount.get().currencyAmount().subtract(orderRequest.orderSize()));
+		customerTradingAccountService.updateCurrencyAmount(customerId, orderRequest.supportedCurrency(),
+														   customerTradingAccount.get().currencyAmount().subtract(orderRequest.orderSize()));
 		paymentsRestService.modifyCustomerFreeBalance(customerId, customerWithFreeBalance.freeBalance().add(totalOrderCost));
 
 		orderRepository.updateStatus(orderId, OrderStatus.EXECUTED.name());
@@ -158,7 +168,8 @@ public class OrderService
 																 OrderStatus.PENDING,
 																 totalOrderCost,
 																 LocalDateTime.now());
-		try{
+		try
+		{
 			return orderRepository.save(orderSaveRequest);
 		}
 		catch (RuntimeException ex)
@@ -166,13 +177,11 @@ public class OrderService
 			logger.error("Error while saving order: " + orderSaveRequest, ex);
 			throw new FailedToStoreOrderException("Failed to store order: " + orderSaveRequest);
 		}
-
 	}
 
-	//should implement the flow of getting currentPrice for currency from marketDataService
 	private BigDecimal currencyCurrentPrice(SupportedCurrency currency)
 	{
-		return BigDecimal.valueOf(10);
+		return marketDataRestService.getPriceForCryptoCurrencyInUSDT(currency.name());
 	}
 
 	private BigDecimal calculateTotalCost(BigDecimal orderSize, BigDecimal price)

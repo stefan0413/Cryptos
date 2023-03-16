@@ -3,15 +3,15 @@ spring:
     name: api-gateway
   data:
     redis:
-      host: localhost
+      host: redis_db
       port: 6379
 customers:
-  base: http://localhost:9090
+  base: http://Customers:8080
   get-by-email-url: ${customers.base}/private/customers/search?email={email}
   register-url:  ${customers.base}/private/customers/authentication/register
   finalise-registration-url:  ${customers.base}/private/customers/authentication/{customerId}/finalise-registration
 payments:
-  base: http://localhost:8081
+  base: http://Payments:8080
   customer:
     get-full-customer: ${payments.base}/private/payments/customer-stripe-accounts/{customerId}
     get-customer-payment-methods: ${payments.base}/private/payments/customer-stripe-accounts/{customerId}/payment-methods
@@ -27,6 +27,6 @@ payments:
     create-withdrawal-request:  ${payments.base}/private/payments/withdrawals/{customerId}/create
     update-withdrawal-status:  ${payments.base}/private/payments/withdrawals/{customerId}/withdrawal-statuses/{withdrawalId}
 trading:
-  make-order-url: http://localhost:8082/private/trading/{customerId}/orders
+  make-order-url: http://Trading:8080/private/trading/{customerId}/orders
 
 
