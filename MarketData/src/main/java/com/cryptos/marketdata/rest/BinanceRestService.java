@@ -1,5 +1,6 @@
 package com.cryptos.marketdata.rest;
 
+import com.cryptos.marketdata.exception.BinanceException;
 import com.cryptos.marketdata.model.BinancePriceResponse;
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
@@ -8,8 +9,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -17,11 +20,23 @@ import java.math.BigDecimal;
 public class BinanceRestService
 {
 
-	private static final String BINANCE_API_PRICE_URL = "https://api.binance.com/api/v3/ticker/price?symbol=";
+	private final String BINANCE_API_PRICE_URL;
+
+	public BinanceRestService(@Value("${binance.api.price-url}") String binanceApiPriceUrl)
+	{
+		BINANCE_API_PRICE_URL = binanceApiPriceUrl;
+	}
 
 	public BigDecimal getPrice(String symbol) throws IOException
 	{
-		return extractPrice(executeRequest(symbol));
+		try
+		{
+			return extractPrice(executeRequest(symbol));
+		}
+		catch (Exception e)
+		{
+			throw new BinanceException("BinanceException", e.getMessage());
+		}
 	}
 
 	private HttpResponse executeRequest(String symbol) throws IOException
@@ -30,7 +45,6 @@ public class BinanceRestService
 		HttpGet request = new HttpGet(BINANCE_API_PRICE_URL + symbol + "USDT");
 
 		return httpClient.execute(request);
-
 	}
 
 	private BigDecimal extractPrice(HttpResponse response) throws IOException

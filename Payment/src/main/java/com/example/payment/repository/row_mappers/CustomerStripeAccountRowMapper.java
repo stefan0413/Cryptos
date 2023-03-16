@@ -19,7 +19,6 @@ public class CustomerStripeAccountRowMapper implements RowMapper<CustomerStripeA
 										 rs.getLong("customer_id"),
 										 rs.getString("currency_code"),
 										 rs.getBigDecimal("free_balance"),
-										 rs.getBigDecimal("invested_balance"),
 										 rs.getString("email"),
 										 rs.getString("names"),
 										 List.of());

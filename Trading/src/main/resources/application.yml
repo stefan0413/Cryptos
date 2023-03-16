@@ -16,3 +16,5 @@ payments:
   customer-with-free-balance-and-currency-url: http://Payments:8080/private/payments/customer-stripe-accounts/{customerId}/free-balance-and-currency
 currency-conversion:
   exchange-rates-url: https://v6.exchangerate-api.com/v6/6385298c43a888c7956e7680/latest/{fromCurrency}
+market-data:
+  currency-price-url: http://market-data:8080/private/currencies/price

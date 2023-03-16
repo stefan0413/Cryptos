@@ -1,4 +1,4 @@
-package com.cryptos.trading.trading.rest;
+package com.cryptos.apigateway.rest.market_data;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,14 +10,12 @@ import java.math.BigDecimal;
 @Service
 public class MarketDataRestService
 {
-
 	private final String MARKET_DATA_URL;
 	private final RestTemplate restTemplate = new RestTemplate();
 
 	public MarketDataRestService(@Value("${market-data.currency-price-url}") String marketDataCurrencyPriceUrl)
 	{
 		MARKET_DATA_URL = marketDataCurrencyPriceUrl;
-		restTemplate.setErrorHandler(new MarketDataExceptionHandling());
 	}
 
 	public BigDecimal getPriceForCryptoCurrencyInUSDT(String symbol)

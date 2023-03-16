@@ -66,7 +66,6 @@ public class CustomerStripeAccountService
 										 customer.customerId(),
 										 customer.currency(),
 										 customer.freeBalance(),
-										 customer.investedBalance(),
 										 customer.email(),
 										 customer.names(),
 										 paymentMethods);
@@ -87,7 +86,6 @@ public class CustomerStripeAccountService
 		CustomerStripeAccountRequest customerStripeAccountRequest =
 				new CustomerStripeAccountRequest(customerData.customerId(),
 												 currencyCode,
-												 BigDecimal.ZERO,
 												 BigDecimal.ZERO,
 												 customerData.email(),
 												 getFullName(customerData).trim());
