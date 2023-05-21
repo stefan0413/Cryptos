@@ -23,7 +23,7 @@ public class GlobalControllerExceptionHandler
 	}
 
 	@ExceptionHandler(CustomerServiceException.class)
-	public ResponseEntity<String> handleClientBasedException(InvalidCredentialsException e)
+	public ResponseEntity<String> handleClientBasedException(CustomerServiceException e)
 	{
 		logger.warn(e.getType() + ": "+ e.getMessage());
 		return ResponseEntity.badRequest().header("REASON",e.getType()).body(e.getMessage());

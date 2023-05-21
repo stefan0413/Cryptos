@@ -19,7 +19,8 @@ public class ServicesResponseErrorHandler implements ResponseErrorHandler
 		return (response.getStatusCode().isError());
 	}
 
-	@Override public void handleError(ClientHttpResponse response) throws IOException
+	@Override
+	public void handleError(ClientHttpResponse response) throws IOException
 	{
 		String responseBody = new BufferedReader(new InputStreamReader(response.getBody()))
 				.lines().collect(Collectors.joining("\n"));
