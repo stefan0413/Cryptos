@@ -6,6 +6,8 @@ import com.cryptos.apigateway.model.customers.FinaliseRegistrationRequest;
 import com.cryptos.apigateway.model.customers.RegistrationRequest;
 import com.cryptos.apigateway.service.customers.AuthenticationService;
 import com.cryptos.apigateway.service.customers.RegistrationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class CustomersController
 {
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final RegistrationService registrationService;
 	private final AuthenticationService authenticationService;
 	private final JwtBlacklistService jwtBlacklistService;
@@ -53,6 +56,7 @@ public class CustomersController
 	@PostMapping("/private/log-out")
 	public void logOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwtToken)
 	{
+		logger.info("Logging out customer");
 		jwtBlacklistService.addTokenToBlacklist(jwtToken.substring(7));
 	}
 }

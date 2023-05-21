@@ -15,7 +15,6 @@ import java.util.List;
 public class CustomerService
 {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final CustomerRepository customerRepository;
 
 	public CustomerService(CustomerRepository customerRepository)

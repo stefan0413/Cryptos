@@ -1,7 +1,6 @@
 package com.example.customers.authentication.controller;
 
 import com.example.customers.authentication.exceptions.CustomerServiceException;
-import com.example.customers.authentication.exceptions.InvalidCredentialsException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +27,7 @@ public class GlobalControllerExceptionHandler
 		logger.warn(e.getType() + ": "+ e.getMessage());
 		return ResponseEntity.badRequest().header("REASON",e.getType()).body(e.getMessage());
 	}
+
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<String> handleDataIntegrityException(DataIntegrityViolationException e)
 	{

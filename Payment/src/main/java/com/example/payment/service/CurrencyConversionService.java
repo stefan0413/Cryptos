@@ -1,8 +1,9 @@
 package com.example.payment.service;
 
 import com.example.payment.exception.CurrencyConversionException;
-import com.example.payment.exception.PaymentsException;
 import com.example.payment.rest.ExchangeRatesRestService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ public class CurrencyConversionService
 {
 
 	private final ExchangeRatesRestService exchangeRatesRestService;
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public CurrencyConversionService(ExchangeRatesRestService exchangeRatesRestService)
 	{
@@ -21,6 +23,7 @@ public class CurrencyConversionService
 
 	public BigDecimal convertAmountFromToCurrency(BigDecimal amount, String from, String to)
 	{
+		logger.info("Getting exchange rate from: " + from + " to: " + to);
 		if (from.equals(to))
 		{
 			return amount;

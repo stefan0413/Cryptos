@@ -18,10 +18,10 @@ public class SchedulerService
 		this.jwtBlacklistService = jwtBlacklistService;
 	}
 	
-	@Scheduled(cron = "* 0 4 * * ?")
+	@Scheduled(cron = "0 4 * * * ?")
 	public void deleteExpiredJwtFromRedisBlacklist()
 	{
-		logger.info("Scheduled task executed");
+		logger.info("Deleting expired JWT from blacklist");
 		jwtBlacklistService.deleteExpiredTokens();
 	}
 }

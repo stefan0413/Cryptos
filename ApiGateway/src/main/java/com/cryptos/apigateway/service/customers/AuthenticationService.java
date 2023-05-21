@@ -3,6 +3,7 @@ package com.cryptos.apigateway.service.customers;
 import com.cryptos.apigateway.jwt.JwtUtils;
 import com.cryptos.apigateway.model.customers.AuthenticationRequest;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,11 @@ public class AuthenticationService
 
 		final UserDetails customer = customerService.loadUserByUsername(authenticationRequest.email());
 
-		return jwtUtils.generateToken(customer);
+		if (!customer.isEnabled())
+		{
+			throw new AuthenticationServiceException("Customer is not fully activated");
+		}
 
+		return jwtUtils.generateToken(customer);
 	}
 }

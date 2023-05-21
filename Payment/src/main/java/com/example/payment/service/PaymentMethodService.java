@@ -5,6 +5,8 @@ import com.example.payment.repository.PaymentMethodRepository;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.PaymentSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,7 @@ public class PaymentMethodService
 {
 
 	private final PaymentMethodRepository paymentMethodRepository;
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public PaymentMethodService(PaymentMethodRepository paymentMethodRepository)
 	{
@@ -23,6 +26,8 @@ public class PaymentMethodService
 
 	public void addPaymentMethodToCustomer(long customerId, String methodToken) throws StripeException
 	{
+		logger.info(String.format("Adding payment method to customer: customerId=%d, methodToken=%s", customerId, methodToken));
+		
 		PaymentSource paymentSource = addPaymentMethodToStripe(customerId, methodToken);
 		savePaymentMethod(customerId, methodToken, paymentSource.getId());
 	}

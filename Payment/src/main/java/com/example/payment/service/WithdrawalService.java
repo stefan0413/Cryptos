@@ -6,6 +6,8 @@ import com.example.payment.model.withdrawal.WithdrawalRequest;
 import com.example.payment.model.withdrawal.WithdrawalResponseWrapper;
 import com.example.payment.model.withdrawal.WithdrawalStatus;
 import com.example.payment.repository.WithdrawalRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,6 +20,7 @@ public class WithdrawalService
 
 	private final CustomerStripeAccountService customerStripeAccountService;
 	private final WithdrawalRepository withdrawalRepository;
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public WithdrawalService(CustomerStripeAccountService customerStripeAccountService, WithdrawalRepository withdrawalRepository)
 	{
@@ -27,6 +30,7 @@ public class WithdrawalService
 
 	public void createWithdrawal(long customerId, String iban, BigDecimal amount)
 	{
+		logger.info("Creating withdrawal request");
 		CustomerStripeAccount customer = customerStripeAccountService.getFullCustomer(customerId);
 
 		if (customer.freeBalance().compareTo(amount) < 0)
@@ -35,7 +39,7 @@ public class WithdrawalService
 		}
 
 		customerStripeAccountService.updateCustomerBalance(customerId, customer.freeBalance().subtract(amount));
-		System.out.println("Amount: " + amount);
+
 		withdrawalRepository.saveWithdrawalRequest(new WithdrawalRequest(customerId, amount, iban, WithdrawalStatus.PENDING, LocalDateTime.now()));
 	}
 

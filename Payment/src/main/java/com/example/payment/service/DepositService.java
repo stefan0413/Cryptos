@@ -40,6 +40,9 @@ public class DepositService
 
 	public String createPaymentIntent(long customerId, String paymentMethodId, String currency, BigDecimal amount) throws Exception
 	{
+		logger.info("Creating payment intent for customer " +
+					createPaymentIntentLog(customerId, paymentMethodId, currency, amount));
+
 		CustomerStripeAccount customer = getFullCustomer(customerId);
 
 		String customerCurrencyCode = customer.currency().toUpperCase();
@@ -68,13 +71,18 @@ public class DepositService
 
 	public void confirmPaymentIntent(long customerId, String paymentIntentId) throws StripeException
 	{
+		logger.info(String.format("Confirming payment intent for cusotmerId=%d with paymentIntentId=%s", customerId, paymentIntentId));
+
 		PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
 
-		if(!paymentIntent.getCustomer().equals(String.valueOf(customerId))){
+		if (!paymentIntent.getCustomer().equals(String.valueOf(customerId)))
+		{
 			throw new IllegalArgumentException("Payment intent does not belong to customer");
 		}
 
-		updateCustomerAndDepositData(customerId, paymentIntent.confirm());
+		PaymentIntent confirmedPaymentIntent = paymentIntent.confirm();
+
+		updateCustomerAndDepositData(customerId, confirmedPaymentIntent);
 	}
 
 	private void updateCustomerAndDepositData(long customerId, PaymentIntent paymentIntent) throws StripeException
@@ -129,5 +137,11 @@ public class DepositService
 											customer.getBalance() + convertAmountToStripeAmount(amount));
 
 		customer.update(params);
+	}
+
+	private String createPaymentIntentLog(long customerId, String paymentMethodId, String currency, BigDecimal amount)
+	{
+		return String.format("{customerId= %d, paymentMethodId=%d, currency=%d, amount=%d}",
+							 customerId, paymentMethodId, currency, amount);
 	}
 }

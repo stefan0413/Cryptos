@@ -9,6 +9,8 @@ import com.example.payment.repository.CustomerStripeAccountRepository;
 import com.example.payment.rest.CustomerRestService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class CustomerStripeAccountService
 {
 
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final CustomerRestService customerRestService;
 	private final CustomerStripeAccountRepository customerStripeAccountRepository;
 	private final PaymentMethodService paymentMethodService;
@@ -35,8 +38,13 @@ public class CustomerStripeAccountService
 	{
 		CustomerDataResponse customerData = customerRestService.getCustomerDataById(customerId);
 
+		logger.info("Creating new customer account in Stripe");
 		createStripeCustomer(customerData);
+
+		logger.info("Saving new customer");
 		saveCustomerStripeAccount(customerData, currencyCode);
+
+		logger.info("Successfully created customerStripeAccount for customer: " + customerId);
 	}
 
 	public CustomerStripeAccount getFullCustomer(long customerId)

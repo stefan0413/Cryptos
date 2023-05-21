@@ -3,6 +3,8 @@ package com.example.payment.controller;
 import com.example.payment.model.withdrawal.WithdrawalResponseWrapper;
 import com.example.payment.model.withdrawal.WithdrawalStatus;
 import com.example.payment.service.WithdrawalService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,7 @@ public class WithdrawalController
 {
 
 	private final WithdrawalService withdrawalService;
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public WithdrawalController(WithdrawalService withdrawalService)
 	{
@@ -41,6 +44,7 @@ public class WithdrawalController
 										@RequestParam BigDecimal amount,
 										@RequestParam String iban)
 	{
+		logger.info(String.format("Customer with customerId=%d submitted withdrawalRequest: iban=%s, amount=%d", customerId, iban, amount));
 		withdrawalService.createWithdrawal(customerId, iban, amount);
 	}
 
